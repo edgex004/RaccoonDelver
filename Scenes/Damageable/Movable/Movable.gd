@@ -2,6 +2,9 @@ extends "../Damageable.gd"
 
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
+onready var move_tween = $MoveTween
+export var move_time = 0.1 # seconds
+
 var my_size
 
 
@@ -24,7 +27,10 @@ func move_tile(dir_vector, movement_size):
 	var cur_pos = get_position()
 	var desired_pos = cur_pos + dir_vector * movement_size
 	if (!check_for_collision(cur_pos,desired_pos)):
-		set_position(desired_pos)
+		#set_position(desired_pos)
+		move_tween.interpolate_property(self, "position", 
+		cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
+		move_tween.start()
 
 func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
 	# Returns true if the space cannot be moved to because something is there
