@@ -10,7 +10,7 @@ var player1_inputs = {"player1_left": Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	damage = 100
 
 
 func _process(delta):

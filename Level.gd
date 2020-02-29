@@ -24,8 +24,22 @@ func _ready():
 			var cell_y_pos = float(level_tiles[rand_index].y)*GroundTileMap.cell_size.y + GroundTileMap.position.y + GroundTileMap.cell_size.y/2.0
 			var is_pos_blocked = check_object_placement(Vector2(cell_x_pos, cell_y_pos))
 			if not is_pos_blocked:
-				spawnDamageable(Vector2(cell_x_pos, cell_y_pos))
-				obj_to_place -= 1
+				if randi() % 10 > 3:
+					spawnDamageable(Vector2(cell_x_pos, cell_y_pos))
+					obj_to_place -= 1
+				else:
+					spawnRandomWalker(Vector2(cell_x_pos, cell_y_pos))
+					obj_to_place -= 1
+	# Spawn player
+	var player_placed = false
+	while not player_placed:
+		var rand_index = randi() % max_tile_index
+		var cell_x_pos = float(level_tiles[rand_index].x)*GroundTileMap.cell_size.x + GroundTileMap.position.x + GroundTileMap.cell_size.x/2.0
+		var cell_y_pos = float(level_tiles[rand_index].y)*GroundTileMap.cell_size.y + GroundTileMap.position.y + GroundTileMap.cell_size.y/2.0
+		var is_pos_blocked = check_object_placement(Vector2(cell_x_pos, cell_y_pos))
+		if not is_pos_blocked:
+			spawnPlayer(Vector2(cell_x_pos, cell_y_pos))
+			player_placed = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,10 +50,10 @@ func _process(delta):
 func _on_Beat_timeout():
 	emit_signal("beat")
 
-func spawnPlayer(x,y):
+func spawnPlayer(_spawn_position : Vector2):
 	var player = PLAYER.instance()
 	add_child(player)
-	player.set_position( Vector2( x, y ))
+	player.set_position( _spawn_position)
 	connect("beat", player, "_on_Beat_timeout")
 
 

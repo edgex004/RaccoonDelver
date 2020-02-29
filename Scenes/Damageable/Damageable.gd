@@ -1,9 +1,10 @@
 extends Area2D
 
 var tilesize = 32
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+
+var is_alive = true
+
+var health = 100
 
 
 # Called when the node enters the scene tree for the first time.
@@ -14,3 +15,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+func take_damage(damage, source):
+	health -= damage
+	print("My health = " + str(health))
+	if health <= 0:
+		is_alive = false
+		queue_free()

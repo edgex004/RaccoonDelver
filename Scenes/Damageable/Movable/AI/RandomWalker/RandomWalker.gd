@@ -11,7 +11,7 @@ var dirs = {0: Vector2.LEFT,
 func _ready():
 	#screensize = get_viewport().get_size()
 	#set_position(screensize/2)
-	pass # Replace with function body.
+	damage = 10
 
 
 func _on_Beat_timeout():
