@@ -12,7 +12,7 @@ var my_size
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_parent().connect("beat", self, "_on_Beat_timeout")
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
