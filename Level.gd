@@ -1,5 +1,8 @@
 extends Node2D
 
+const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
+const DAMAGEABLE = preload("res://Scenes/Damageable/Damageable.tscn")
+const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 signal beat
 
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
@@ -21,7 +24,7 @@ func _ready():
 			var cell_y_pos = float(level_tiles[rand_index].y)*GroundTileMap.cell_size.y + GroundTileMap.position.y
 			var is_pos_open = check_object_placement(Vector2(cell_x_pos, cell_y_pos))
 			if is_pos_open:
-				spawn_object(Vector2(cell_x_pos, cell_y_pos))
+				spawnDamageable(Vector2(cell_x_pos, cell_y_pos))
 				obj_to_place -= 1
 
 
@@ -30,13 +33,26 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_accept"):
 		print(check_object_placement(get_global_mouse_position()))
 
-
 func _on_Beat_timeout():
 	emit_signal("beat")
 
+func spawnPlayer(x,y):
+	var player = PLAYER.instance()
+	add_child(player)
+	player.set_position( Vector2( x, y ))
+	connect("beat", player, "_on_Beat_timeout")
 
-func spawn_object(_spawn_position : Vector2):
-	pass
+
+func spawnDamageable(_spawn_position : Vector2):
+	var obj = DAMAGEABLE.instance()
+	add_child(obj)
+	obj.set_position( _spawn_position)
+	
+func spawnRandomWalker(_spawn_position : Vector2):
+	var obj = RANDOM_WALKER.instance()
+	add_child(obj)
+	obj.set_position( _spawn_position)
+	connect("beat", obj, "_on_Beat_timeout")
 
 func check_object_placement(_location : Vector2) -> bool:
 	# Returns true if the space cannot be moved to because something is there
@@ -59,7 +75,3 @@ func check_object_placement(_location : Vector2) -> bool:
 		#result contains blocking object info
 		collision_occured = true
 	return collision_occured
-
-
-
-
