@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="8.4666662mm"
+   height="8.4666662mm"
+   viewBox="0 0 8.466666 8.466666"
+   version="1.1"
+   id="svg16"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="BasicEnemySkin.svg">
+  <defs
+     id="defs10">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect3771"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect64"
+       is_visible="true" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.839192"
+     inkscape:cx="18.507228"
+     inkscape:cy="10.008654"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg16"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-87.236905,-97.352971)">
+    <circle
+       style="fill:#ffcc00;stroke-width:0.26458332"
+       id="path18"
+       cx="91.470238"
+       cy="101.5863"
+       r="4.2333331" />
+    <circle
+       style="fill:#ffffff;stroke-width:0.26458332"
+       id="path20"
+       cx="89.948883"
+       cy="100.30811"
+       r="0.79374999" />
+    <circle
+       style="fill:#ffffff;stroke-width:0.26458332"
+       id="path20-8"
+       cx="92.736458"
+       cy="100.32008"
+       r="0.79374999"
+       inkscape:label="path20-8" />
+  </g>
+  <path
+     style="fill:#ff0000;stroke-width:0.06313454"
+     d="M 15.047455,31.932765 C 13.645609,31.862291 12.191267,31.578656 10.827263,31.109717 4.8535834,29.055991 0.63891835,23.670649 0.08905494,17.388837 -0.55487814,10.032343 3.9592007,3.1685602 10.968327,0.84659977 c 1.696727,-0.56208596 3.162652,-0.79352553 5.026146,-0.79352553 1.912443,0 3.263958,0.21433656 5.050763,0.8009999 3.797793,1.24693236 6.981764,3.90883186 8.978761,7.50652436 0.867645,1.5631082 1.504609,3.4687525 1.793739,5.3664355 0.162579,1.067078 0.162579,3.478609 0,4.545686 -0.7343,4.81953 -3.476664,8.933488 -7.618614,11.429063 -2.724811,1.641731 -5.827487,2.398098 -9.151667,2.230982 z m 6.532832,-17.807744 c 0.649334,-0.16368 1.321867,-0.641913 1.690605,-1.202176 0.845226,-1.284246 0.671409,-2.863061 -0.42848,-3.8919528 -0.602695,-0.563792 -1.252901,-0.8259298 -2.052233,-0.8273806 -1.83965,-0.00334 -3.247065,1.620089 -2.984509,3.4425764 0.256076,1.777506 2.003807,2.925307 3.774617,2.478933 z M 11.011971,14.0848 c 1.144936,-0.298879 2.011411,-1.259835 2.215418,-2.456989 C 13.562284,9.662586 11.75673,7.8570324 9.7915054,8.1919271 8.1345913,8.4742817 6.9998225,10.020567 7.2700207,11.627811 c 0.2457227,1.461654 1.5275419,2.565453 2.9792103,2.565453 0.190982,0 0.534215,-0.04881 0.76274,-0.108464 z"
+     id="path3775"
+     inkscape:connector-curvature="0"
+     transform="scale(0.26458333)" />
+</svg>
