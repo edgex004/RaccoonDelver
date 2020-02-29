@@ -14,17 +14,13 @@ func _ready():
 	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	if not (has_moved):
+		for dir in player1_inputs.keys():
+			if Input.is_action_just_pressed(dir):
+				move_tile(player1_inputs[dir], tilesize)
+				has_moved = true
 
 func _on_Beat_timeout():
 	print("Beat Happened...")
 	has_moved = false
-	
-func _unhandled_input(event):
-	if not (has_moved):
-		for dir in player1_inputs.keys():
-			if event.is_action_pressed(dir):
-				move_tile(player1_inputs[dir], tilesize)
-				has_moved = true
