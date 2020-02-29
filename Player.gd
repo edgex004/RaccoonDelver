@@ -1,11 +1,6 @@
 extends Node2D
 
-const MOVEMENT_COLLISION_MASK = 1 #bit mask (1^0 = static objects)
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
+const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

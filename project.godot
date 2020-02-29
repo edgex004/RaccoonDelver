@@ -19,6 +19,12 @@ config/name="Godot Proj"
 run/main_scene="res://Level.tscn"
 config/icon="res://icon.png"
 
+[layer_names]
+
+2d_physics/layer_1="Background"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemies"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
