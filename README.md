@@ -1,1 +1,0 @@
-# deus_ex_medical
