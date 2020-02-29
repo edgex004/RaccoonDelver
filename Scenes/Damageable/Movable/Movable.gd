@@ -1,8 +1,14 @@
-extends Node2D
+extends "../Damageable.gd"
 
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
-var tilesize = 32
+var my_size
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,9 +20,10 @@ func _ready():
 #	pass
 
 
-func _on_Beat_timeout():
-	print("Beat Happened...")
-
+func move_tile(dir_vector, movement_size):
+	var cur_pos = get_position()
+	var desired_pos = cur_pos + dir_vector * movement_size
+	set_position(desired_pos)
 
 func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
 	# Returns true if the space cannot be moved to because something is there
