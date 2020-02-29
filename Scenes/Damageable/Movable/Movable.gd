@@ -23,7 +23,8 @@ func _ready():
 func move_tile(dir_vector, movement_size):
 	var cur_pos = get_position()
 	var desired_pos = cur_pos + dir_vector * movement_size
-	set_position(desired_pos)
+	if (!check_for_collision(cur_pos,desired_pos)):
+		set_position(desired_pos)
 
 func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
 	# Returns true if the space cannot be moved to because something is there
