@@ -20,10 +20,10 @@ func _ready():
 	if GroundTileMap.tile_set:
 		while(obj_to_place > 0):
 			var rand_index = randi() % max_tile_index
-			var cell_x_pos = float(level_tiles[rand_index].x)*GroundTileMap.cell_size.x + GroundTileMap.position.x
-			var cell_y_pos = float(level_tiles[rand_index].y)*GroundTileMap.cell_size.y + GroundTileMap.position.y
-			var is_pos_open = check_object_placement(Vector2(cell_x_pos, cell_y_pos))
-			if is_pos_open:
+			var cell_x_pos = float(level_tiles[rand_index].x)*GroundTileMap.cell_size.x + GroundTileMap.position.x + GroundTileMap.cell_size.x/2.0
+			var cell_y_pos = float(level_tiles[rand_index].y)*GroundTileMap.cell_size.y + GroundTileMap.position.y + GroundTileMap.cell_size.y/2.0
+			var is_pos_blocked = check_object_placement(Vector2(cell_x_pos, cell_y_pos))
+			if not is_pos_blocked:
 				spawnDamageable(Vector2(cell_x_pos, cell_y_pos))
 				obj_to_place -= 1
 
