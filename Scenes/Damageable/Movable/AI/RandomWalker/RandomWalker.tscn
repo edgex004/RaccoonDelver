@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scenes/Damageable/Movable/AI/BasicAI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.gd" type="Script" id=2]
-[ext_resource path="res://Scenes/Damageable/Movable/AI/BasicEnemySkin.svg" type="Texture" id=3]
+[ext_resource path="res://Scenes/Damageable/Movable/AI/RandomWalker/BasicEnemySkin.png" type="Texture" id=3]
 
 [node name="RandomWalker" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
