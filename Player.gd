@@ -1,10 +1,8 @@
 extends Node2D
 
-const MOVEMENT_COLLISION_MASK = 1 #bit mask (1^0 = static objects)
+const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
 var tilesize = 32
-
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

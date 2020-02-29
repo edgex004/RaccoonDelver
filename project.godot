@@ -19,8 +19,13 @@ config/name="Godot Proj"
 run/main_scene="res://Level.tscn"
 config/icon="res://icon.png"
 
-[input]
+[layer_names]
 
+2d_physics/layer_1="Background"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Enemies"
+
+[input]
 player1_left={
 "deadzone": 0.5,
 "events": [ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":14,"pressure":0.0,"pressed":false,"script":null)
