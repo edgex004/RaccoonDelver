@@ -1,8 +1,7 @@
 extends "../Movable.gd"
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+var beat_counter = 0
+
 var has_moved = false
 var player1_inputs = {"player1_left": Vector2.LEFT,
 						"player1_right": Vector2.RIGHT,
@@ -22,5 +21,7 @@ func _process(delta):
 				has_moved = true
 
 func _on_Beat_timeout():
-	print("Beat Happened...")
+	var beats_dict = {0: ".", 1: "..", 2: "..."}
+	print("Beat Happened" + beats_dict[beat_counter])
+	beat_counter = (beat_counter + 1) % 3
 	has_moved = false

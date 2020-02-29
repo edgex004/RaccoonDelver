@@ -5,3 +5,5 @@
 
 [node name="Movable" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="MoveTween" type="Tween" parent="." index="2"]
