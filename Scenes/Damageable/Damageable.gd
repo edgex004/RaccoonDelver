@@ -22,8 +22,6 @@ func _ready():
 func take_damage(damage, source):
 	var my_col_mask = get_collision_mask()
 	var source_col_mask = source.get_collision_mask()
-	print("My collision mask: " +  str(my_col_mask))
-	print("Source collision mask: " + str(source_col_mask))
 	
 	if not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
