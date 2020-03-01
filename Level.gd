@@ -42,7 +42,7 @@ func spawnRandomWalker(_spawn_position : Vector2):
 	obj.set_position( _spawn_position)
 	connect("beat", obj, "_on_Beat_timeout")
 
-func spawn_random_objects(obj_to_place : int) -> void:
+func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 ) -> void:
 	if !GroundTileMap.tile_set:
 		return
 	#Get all tiles
@@ -73,11 +73,19 @@ func spawn_random_objects(obj_to_place : int) -> void:
 		open_tiles.erase(selected_tile-Vector2(-1,-1))
 		obj_to_place -= 1
 	# Spawn player
-	var rand_index = randi() % open_tiles.size()
-	var selected_tile = open_tiles[rand_index]
-	var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
-	spawnPlayer(player_spawn_position)
-	open_tiles.erase(selected_tile)
+	for i in range(num_of_players):
+		var rand_index = randi() % open_tiles.size()
+		var selected_tile = open_tiles[rand_index]
+		var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
+		spawnPlayer(player_spawn_position)
+		open_tiles.erase(selected_tile)
+	#Spawn enemies
+	for i in range(num_of_enemies):
+		var rand_index = randi() % open_tiles.size()
+		var selected_tile = open_tiles[rand_index]
+		var enemy_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
+		spawnRandomWalker(enemy_spawn_position)
+		open_tiles.erase(selected_tile)
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_x_pos : float = float(_tile_cords.x*_tile_map.cell_size.x) + _tile_map.position.x + float(_tile_map.cell_size.x)/2.0
