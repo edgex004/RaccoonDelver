@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Damageable/Movable/AI/BasicAI.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Damageable/Movable/AI/Chaser/Chaser.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 160.0
+
+[node name="Chaser" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="SearchRange" type="Area2D" parent="." index="3"]
+collision_layer = 2
+collision_mask = 8
+
+[node name="SearchCollision" type="CollisionShape2D" parent="SearchRange" index="0"]
+shape = SubResource( 1 )
+[connection signal="area_entered" from="SearchRange" to="." method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="SearchRange" to="." method="_on_Area2D_area_exited"]
