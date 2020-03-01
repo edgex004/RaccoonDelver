@@ -41,7 +41,7 @@ func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
 	if results:
 		#line of sight to the bottom part of the target is blocked
 		#result contains blocking object info
-		
+		print(results)
 		if results is Array:
 			for collison_result in results:
 			#Getting the unit directly
