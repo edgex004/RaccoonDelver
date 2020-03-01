@@ -30,7 +30,7 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 	var desired_tile_x = tile_x + dir_vector.x * movement_size
 	var desired_tile_y = tile_y + dir_vector.y * movement_size
 	var desired_pos = get_node('/root/Level')._get_tile_pos(Vector2(desired_tile_x,desired_tile_y),get_node('/root/Level').GroundTileMap)
-	var blocking_object = check_for_collision(dir_vector ,movement_size)
+	var blocking_object = check_for_collision(dir_vector, movement_size)
 	if (!blocking_object):
 		#set_position(desired_pos)
 		move_tween.interpolate_property(self, "position", 
@@ -44,6 +44,12 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 	# Returns true if the space cannot be moved to because something is there
-	var desired_tile_x = tile_x + dir_vector.x * movement_size
-	var desired_tile_y = tile_y + dir_vector.y * movement_size
-	return get_node('/root/Level').get_object(desired_tile_x,desired_tile_y)
+	if movement_size <= 0:
+		return null
+	for n in range(movement_size):
+		var moved = n + 1
+		var desired_tile_x = tile_x + dir_vector.x * moved
+		var desired_tile_y = tile_y + dir_vector.y * moved
+		var blocking_object = get_node('/root/Level').get_object(desired_tile_x,desired_tile_y)
+		if blocking_object:
+			return blocking_object
