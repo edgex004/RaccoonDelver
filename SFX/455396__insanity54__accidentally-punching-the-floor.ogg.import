@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/455396__insanity54__accidentally-punching-the-floor.ogg-29caf67cd0fb8899220a4b3c07cd9274.oggstr"
+
+[deps]
+
+source_file="res://SFX/455396__insanity54__accidentally-punching-the-floor.ogg"
+dest_files=[ "res://.import/455396__insanity54__accidentally-punching-the-floor.ogg-29caf67cd0fb8899220a4b3c07cd9274.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
