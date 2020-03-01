@@ -30,6 +30,10 @@ config/name="Godot Proj"
 run/main_scene="res://Level.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Globals="*res://Globals.gd"
+
 [input]
 
 player1_left={
