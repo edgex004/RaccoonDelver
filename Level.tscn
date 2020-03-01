@@ -10,6 +10,8 @@ script = ExtResource( 1 )
 wait_time = 0.6
 autostart = true
 
+[node name="Player" type="Node2D" parent="."]
+
 [node name="GroundTileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 3 )
 cell_size = Vector2( 32, 32 )
