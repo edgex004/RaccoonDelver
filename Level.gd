@@ -15,7 +15,10 @@ func _ready():
 	randomize() #New random seed
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
+	var num_of_gamepads = Input.get_connected_joypads().size()
 	var players_to_spawn = 1
+	if num_of_gamepads > 0:
+		players_to_spawn = 2
 	var enemies_to_spawn = 10
 	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn)
 
@@ -74,6 +77,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		open_tiles.erase(selected_tile-Vector2(-1,1))
 		open_tiles.erase(selected_tile-Vector2(-1,-1))
 		obj_to_place -= 1
+	assert(open_tiles.size() > num_of_players + num_of_enemies)
 	# Spawn player
 	for i in range(num_of_players):
 		var rand_index = randi() % open_tiles.size()
