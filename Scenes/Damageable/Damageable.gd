@@ -35,6 +35,7 @@ func take_damage(damage, source):
 	if not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
 		health -= damage
+		$Damage.play()
 		print("My health = " + str(health))
 		if health <= 0:
 			is_alive = false
