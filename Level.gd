@@ -12,12 +12,18 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/ExperienceBar/TextureProgress
+onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/ExperienceBar/TextureProgress
+onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var StateMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Globals.current_level = self
+	# hide player 2 GUI until we need it
+	Player2GUI.visible = false
 	var used_cells = GroundTileMap.get_used_cells()
 	for pos in used_cells:
 		if 1 + pos.x > StateMap.size():
@@ -56,8 +62,19 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 		connect("beat", player, "_on_Beat_timeout")
 		if is_first_player:
 			Globals.player_one = player
+			player.connect("player_experience_gained", Player1ExpBar, 
+				"on_player_experience_gain")
+			Player1ExpBar.initialize(player.experience, player.experience_required)
 		else: 
 			Globals.player_two = player
+			Player2GUI.visible = true
+			Player2ExpBar.is_first_player = false
+			player.connect("player_experience_gained", Player2ExpBar, 
+				"on_player_experience_gain")
+			Player2ExpBar.initialize(player.experience, player.experience_required)
+		
+		# init experience bars
+		
 
 
 func spawnDamageable(x : int, y : int):

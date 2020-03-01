@@ -15,6 +15,8 @@ var exp_req_base = 50
 var experience_required = _get_experience_required(level + 1)
 var experience_total = 0
 
+signal player_experience_gained(growth_data)
+
 var has_moved = false
 var player1_inputs = {"player1_left": Vector2.LEFT,
 						"player1_right": Vector2.RIGHT,
@@ -53,10 +55,13 @@ func _get_experience_required(level):
 func gain_experience(value):
 	experience += value
 	experience_total += value
-	print("Cur exp: " + str(experience) + ". Req exp: " + str(experience_required))
+	var growth_data = []
 	while experience >= experience_required:
 		experience -= experience_required
+		growth_data.append([is_first_player, experience_required, experience_required])
 		level_up()
+	growth_data.append([is_first_player, experience, experience_required])
+	emit_signal("player_experience_gained", growth_data)
 
 func level_up():
 	level += 1
