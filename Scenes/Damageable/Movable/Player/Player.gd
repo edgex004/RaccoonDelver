@@ -53,7 +53,7 @@ func _get_experience_required(level):
 func gain_experience(value):
 	experience += value
 	experience_total += value
-	print("Cur exp: " + str(experience) + "Req exp: " + str(experience_required))
+	print("Cur exp: " + str(experience) + ". Req exp: " + str(experience_required))
 	while experience >= experience_required:
 		experience -= experience_required
 		level_up()
