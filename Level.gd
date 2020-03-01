@@ -24,10 +24,10 @@ func _process(delta):
 func _on_Beat_timeout():
 	emit_signal("beat")
 
-func spawnPlayer(x,y):
+func spawnPlayer(_spawn_position : Vector2):
 	var player = PLAYER.instance()
 	add_child(player)
-	player.set_position( Vector2( x, y ))
+	player.set_position( _spawn_position)
 	connect("beat", player, "_on_Beat_timeout")
 
 
@@ -72,6 +72,12 @@ func spawn_random_objects(obj_to_place : int) -> void:
 		open_tiles.erase(selected_tile-Vector2(-1,1))
 		open_tiles.erase(selected_tile-Vector2(-1,-1))
 		obj_to_place -= 1
+	# Spawn player
+	var rand_index = randi() % open_tiles.size()
+	var selected_tile = open_tiles[rand_index]
+	var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
+	spawnPlayer(player_spawn_position)
+	open_tiles.erase(selected_tile)
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_x_pos : float = float(_tile_cords.x*_tile_map.cell_size.x) + _tile_map.position.x + float(_tile_map.cell_size.x)/2.0
