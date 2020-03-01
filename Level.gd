@@ -3,6 +3,7 @@ extends Node2D
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 const CHASER = preload("res://Scenes/Damageable/Movable/AI/Chaser/Chaser.tscn")
+const FLOATER = preload("res://Scenes/Damageable/Movable/AI/Floater/Floater.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
@@ -66,22 +67,13 @@ func spawnDamageable(x : int, y : int):
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
-func spawnRandomWalker(x : int, y : int):
+func spawnEnemy(x : int, y : int, _resource):
 	if (StateMap[x][y] == null):
-		var obj = RANDOM_WALKER.instance()
+		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
-
-func spawnChaser(x : int, y : int):
-	if (StateMap[x][y] == null):
-		var obj = CHASER.instance()
-		set_tile(x,y,obj)
-		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
-		connect("beat", obj, "_on_Beat_timeout")
-
 
 func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 ) -> void:
 	if !GroundTileMap.tile_set:
@@ -124,10 +116,13 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(num_of_enemies):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		if randi() % 100 > 30:
-			spawnRandomWalker(selected_tile.x, selected_tile.y)
+		var rand_chance = randf()
+		if rand_chance < 0.33:
+			spawnEnemy(selected_tile.x, selected_tile.y, RANDOM_WALKER)
+		elif rand_chance < 0.66:
+			spawnEnemy(selected_tile.x, selected_tile.y, FLOATER)
 		else:
-			spawnChaser(selected_tile.x, selected_tile.y)
+			spawnEnemy(selected_tile.x, selected_tile.y, CHASER)
 		open_tiles.erase(selected_tile)
 	
 

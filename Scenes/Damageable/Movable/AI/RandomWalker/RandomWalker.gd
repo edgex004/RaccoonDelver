@@ -11,13 +11,20 @@ var dirs = {0: Vector2.LEFT,
 func _ready():
 	#screensize = get_viewport().get_size()
 	#set_position(screensize/2)
-	damage = 10
+	pass
 
 
 func _on_Beat_timeout():
 	#print("Beat Happened...")
-	var selected_dir = randi() % len(dirs)
-	
-	for dir in dirs:
-		if dir == selected_dir:
-			move_tile(dirs[dir], 1)
+	var num_of_dirs = len(dirs)
+	var selected_dir = randi() % num_of_dirs
+	for i in range(4):
+		#Search for a direction that is not blocked
+		selected_dir += i
+		if selected_dir >= num_of_dirs:
+			selected_dir = 0
+		var collision_result = check_for_collision(dirs[selected_dir], 1)
+		if !collision_result:
+			#Found an unblocked direction
+			move_tile(dirs[selected_dir], 1)
+			break

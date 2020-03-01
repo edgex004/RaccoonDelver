@@ -6,6 +6,7 @@
 
 [node name="RandomWalker" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+damage = 10.0
 
 [node name="Sprite" parent="." index="1"]
 texture = ExtResource( 3 )
