@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BasicEnemySkin.svg-3c3be694e0decc20b36ee9c6e3d0bf54.stex"
+path="res://.import/Floater.png-feeb54e02940172846a88bac5164d48f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Damageable/Movable/AI/BasicEnemySkin.svg"
-dest_files=[ "res://.import/BasicEnemySkin.svg-3c3be694e0decc20b36ee9c6e3d0bf54.stex" ]
+source_file="res://Scenes/Damageable/Movable/AI/Floater/Floater.png"
+dest_files=[ "res://.import/Floater.png-feeb54e02940172846a88bac5164d48f.stex" ]
 
 [params]
 

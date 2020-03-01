@@ -1,4 +1,5 @@
 extends "../Movable.gd"
+class_name Player
 
 var beat_counter = 0
 var is_first_player : bool = true

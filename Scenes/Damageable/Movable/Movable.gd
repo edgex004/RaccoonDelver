@@ -1,4 +1,4 @@
-extends "../Damageable.gd"
+extends Damageable
 
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 

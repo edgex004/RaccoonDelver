@@ -1,13 +1,13 @@
 extends Node2D
 
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
-const DAMAGEABLE = preload("res://Objects/Box.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 const CHASER = preload("res://Scenes/Damageable/Movable/AI/Chaser/Chaser.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
-signal beat
-
+const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
+
+signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
@@ -16,6 +16,7 @@ var StateMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Globals.current_level = self
 	var used_cells = GroundTileMap.get_used_cells()
 	for pos in used_cells:
 		if 1 + pos.x > StateMap.size():
@@ -52,11 +53,15 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		player.is_first_player = is_first_player
 		connect("beat", player, "_on_Beat_timeout")
+		if is_first_player:
+			Globals.player_one = player
+		else: 
+			Globals.player_two = player
 
 
 func spawnDamageable(x : int, y : int):
 	if (StateMap[x][y] == null):
-		var obj = DAMAGEABLE.instance()
+		var obj = PLANT.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
