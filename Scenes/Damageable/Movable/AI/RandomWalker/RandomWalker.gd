@@ -11,7 +11,21 @@ var dirs = {0: Vector2.LEFT,
 func _ready():
 	#screensize = get_viewport().get_size()
 	#set_position(screensize/2)
+<<<<<<< Updated upstream
 	pass
+=======
+	damage = 10
+	exp_on_kill_scaler = 0.65
+	set_level(1)
+	var rand_sprite = randi() % 3
+	match rand_sprite:
+		0:
+			get_node('Sprite').texture = preload('res://Scenes/Damageable/Movable/AI/RandomWalker/BasicEnemySkin.png')
+		1:
+			get_node('Sprite').texture = preload('res://Scenes/Damageable/Movable/AI/RandomWalker/Floater.png')
+		2:
+			get_node('Sprite').texture = preload('res://Scenes/Damageable/Movable/AI/RandomWalker/Fatty.png')
+>>>>>>> Stashed changes
 
 
 func _on_Beat_timeout():

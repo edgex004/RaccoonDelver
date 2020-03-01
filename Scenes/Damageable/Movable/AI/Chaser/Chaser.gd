@@ -15,8 +15,14 @@ var dirs = {0: Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+<<<<<<< Updated upstream
 	pass
 	#get_node("SearchRange/SearchCollision").set_shape()
+=======
+	damage = 10
+	exp_on_kill_scaler = 0.85
+	set_level(1)
+>>>>>>> Stashed changes
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
