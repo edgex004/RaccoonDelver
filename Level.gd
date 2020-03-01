@@ -103,10 +103,11 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(num_of_players):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
+		var is_first_player = true
 		if i > 0:
 			spawnPlayer(selected_tile.x, selected_tile.y, true)
 		else:
-			spawnPlayer(selected_tile.x, selected_tile.y, false)
+			spawnPlayer(selected_tile.x, selected_tile.y, is_first_player)
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
 	for i in range(num_of_enemies):
