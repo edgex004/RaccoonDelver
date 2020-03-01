@@ -3,6 +3,7 @@ extends Node2D
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
 const DAMAGEABLE = preload("res://Objects/Box.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
+const CHASER = preload("res://Scenes/Damageable/Movable/AI/Chaser/Chaser.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 signal beat
 
@@ -68,6 +69,14 @@ func spawnRandomWalker(x : int, y : int):
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
 
+func spawnChaser(x : int, y : int):
+	if (StateMap[x][y] == null):
+		var obj = CHASER.instance()
+		set_tile(x,y,obj)
+		get_node("YSort").add_child(obj)
+		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+		connect("beat", obj, "_on_Beat_timeout")
+
 
 func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 ) -> void:
 	if !GroundTileMap.tile_set:
@@ -110,7 +119,10 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(num_of_enemies):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		spawnRandomWalker(selected_tile.x, selected_tile.y)
+		if randi() % 100 > 30:
+			spawnRandomWalker(selected_tile.x, selected_tile.y)
+		else:
+			spawnChaser(selected_tile.x, selected_tile.y)
 		open_tiles.erase(selected_tile)
 	
 
