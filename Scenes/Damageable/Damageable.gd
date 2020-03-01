@@ -6,7 +6,8 @@ var tile_y
 
 var is_alive = true
 
-var health = 100
+var health = 100.0
+var health_max = 100.0
 
 const BACKGROUND_COL_MASK = 1 # 2^0
 const PLAYER_COL_MASK = 2 # 2^1
@@ -15,6 +16,7 @@ const ENEMY_COL_MASK = 4 # 2^2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$ProgressBar.hide()
 	var rand_sprite = randi() % 3
 	match rand_sprite:
 		0:
@@ -35,6 +37,8 @@ func take_damage(damage, source):
 	if not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
 		health -= damage
+		$ProgressBar.show()
+		$ProgressBar.value = 100.0 * health/health_max
 		$Damage.play()
 		print("My health = " + str(health))
 		if health <= 0:
