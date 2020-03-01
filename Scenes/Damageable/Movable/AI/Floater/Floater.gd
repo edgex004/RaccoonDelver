@@ -9,7 +9,9 @@ var locked_dir : Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	damage = 10
+	exp_on_kill_scaler = 0.75
+	set_level(1)
 
 
 func _on_Beat_timeout():
