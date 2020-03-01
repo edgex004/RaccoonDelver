@@ -1,7 +1,7 @@
 extends Node2D
 
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
-const DAMAGEABLE = preload("res://Scenes/Damageable/Damageable.tscn")
+const DAMAGEABLE = preload("res://Objects/Box.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 signal beat
 
@@ -32,7 +32,7 @@ func _on_Beat_timeout():
 
 func spawnPlayer(_spawn_position : Vector2, is_first_player : bool):
 	var player = PLAYER.instance()
-	add_child(player)
+	get_node("YSort").add_child(player)
 	player.set_position( _spawn_position)
 	player.is_first_player = is_first_player
 	connect("beat", player, "_on_Beat_timeout")
@@ -40,12 +40,12 @@ func spawnPlayer(_spawn_position : Vector2, is_first_player : bool):
 
 func spawnDamageable(_spawn_position : Vector2):
 	var obj = DAMAGEABLE.instance()
-	add_child(obj)
+	get_node("YSort").add_child(obj)
 	obj.set_position( _spawn_position)
 	
 func spawnRandomWalker(_spawn_position : Vector2):
 	var obj = RANDOM_WALKER.instance()
-	add_child(obj)
+	get_node("YSort").add_child(obj)
 	obj.set_position( _spawn_position)
 	connect("beat", obj, "_on_Beat_timeout")
 
@@ -97,6 +97,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		var enemy_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
 		spawnRandomWalker(enemy_spawn_position)
 		open_tiles.erase(selected_tile)
+	
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_x_pos : float = float(_tile_cords.x*_tile_map.cell_size.x) + _tile_map.position.x + float(_tile_map.cell_size.x)/2.0
