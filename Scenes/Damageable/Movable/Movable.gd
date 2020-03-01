@@ -47,18 +47,9 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 	# Returns true if the space cannot be moved to because something is there
-<<<<<<< Updated upstream
 	var desired_tile_x = tile_x + dir_vector.x * movement_size
 	var desired_tile_y = tile_y + dir_vector.y * movement_size
 	return get_node('/root/Level').get_object(desired_tile_x,desired_tile_y)
-=======
-	var collider = get_node('/root/Level').get_object(x,y)
-	if (collider == null): return false
-	var space_state = get_world_2d().direct_space_state
-	if is_instance_valid(collider) and 'is_alive' in collider and collider.is_alive and collider.has_method('take_damage'):
-		collider.take_damage(damage, self)
-	return true
 
 func get_level():
 	return level
->>>>>>> Stashed changes

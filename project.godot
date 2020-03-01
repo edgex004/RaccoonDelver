@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Area2D",
+"class": "Damageable",
+"language": "GDScript",
+"path": "res://Scenes/Damageable/Damageable.gd"
+}, {
+"base": "",
+"class": "Player",
+"language": "GDScript",
+"path": "res://Scenes/Damageable/Movable/Player/Player.gd"
+} ]
 _global_script_class_icons={
-
+"Damageable": "",
+"Player": ""
 }
 
 [application]
