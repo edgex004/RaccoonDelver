@@ -64,7 +64,7 @@ func spawnRandomWalker(x : int, y : int):
 	if (StateMap[x][y] == null):
 		var obj = RANDOM_WALKER.instance()
 		set_tile(x,y,obj)
-	get_node("YSort").add_child(obj)
+		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
 
