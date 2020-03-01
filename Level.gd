@@ -1,7 +1,7 @@
 extends Node2D
 
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
-const DAMAGEABLE = preload("res://Scenes/Damageable/Damageable.tscn")
+const DAMAGEABLE = preload("res://Objects/Box.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 signal beat
@@ -47,7 +47,7 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 	if (StateMap[x][y] == null):
 		var player = PLAYER.instance()
 		set_tile(x,y,player)
-		add_child(player)
+		get_node("YSort").add_child(player)
 		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		player.is_first_player = is_first_player
 		connect("beat", player, "_on_Beat_timeout")
@@ -57,14 +57,14 @@ func spawnDamageable(x : int, y : int):
 	if (StateMap[x][y] == null):
 		var obj = DAMAGEABLE.instance()
 		set_tile(x,y,obj)
-		add_child(obj)
+		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
 func spawnRandomWalker(x : int, y : int):
 	if (StateMap[x][y] == null):
 		var obj = RANDOM_WALKER.instance()
 		set_tile(x,y,obj)
-		add_child(obj)
+	get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
 
@@ -114,6 +114,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		var selected_tile = open_tiles[rand_index]
 		spawnRandomWalker(selected_tile.x, selected_tile.y)
 		open_tiles.erase(selected_tile)
+	
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_x_pos : float = float(_tile_cords.x*_tile_map.cell_size.x) + _tile_map.position.x + float(_tile_map.cell_size.x)/2.0
