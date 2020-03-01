@@ -11,6 +11,19 @@ var dirs = {0: Vector2.LEFT,
 func _ready():
 	damage = 10
 	exp_on_kill_scaler = 0.65
+	
+	# Damage variables
+	damage_lin_coef = 2
+	damage_pow_coef = 1.2
+	damage_base = 10
+	damage_scaler = 1
+	
+	# Health variables
+	health_lin_coef = 10
+	health_pow_coef = 0.000001
+	health_base = 9
+	health_scaler = 1
+	
 	set_level(1)
 
 

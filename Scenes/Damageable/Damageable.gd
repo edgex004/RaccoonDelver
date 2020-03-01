@@ -7,7 +7,7 @@ var tile_y
 
 var is_alive = true
 
-var health = 100.0
+var health = 5.0
 var health_max = 100.0
 var experience_on_kill = 0
 

@@ -15,6 +15,14 @@ var exp_req_base = 50
 var experience_required = _get_experience_required(level + 1)
 var experience_total = 0
 
+# Damage variables
+var damage_lin_coef = 10
+var damage_base = 10
+
+# Health variables
+var health_lin_coef = 10
+var health_base = 100
+
 signal player_experience_gained(growth_data)
 
 var has_moved = false
@@ -29,7 +37,8 @@ var player2_inputs = {"player2_left": Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	damage = 100
+	update_player_stats()
+	health = health_max
 
 
 func _process(delta):
@@ -69,6 +78,11 @@ func level_up():
 	#var stats = ['damage', 'health_max']
 	#var random_stat = stats[randi() % stats.size()]
 	#set(random_stat, get(random_stat) + 1)
-	damage = damage + 20
+	update_player_stats()
+	#restore health to full on leveling
 	health = health_max
 	$ProgressBar.hide()
+
+func update_player_stats():
+	health_max = health_base + health_lin_coef * (level-1)
+	damage = damage_base + damage_lin_coef * (level-1)

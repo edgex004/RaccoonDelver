@@ -9,8 +9,20 @@ var locked_dir : Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	damage = 10
 	exp_on_kill_scaler = 0.75
+	
+	# Damage variables
+	damage_lin_coef = 2.5
+	damage_pow_coef = 1.25
+	damage_base = 30
+	damage_scaler = 1
+	
+	# Health variables
+	health_lin_coef = 7.5
+	health_pow_coef = 1.15
+	health_base = 20
+	health_scaler = 1
+	
 	set_level(1)
 
 
