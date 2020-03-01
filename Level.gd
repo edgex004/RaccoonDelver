@@ -18,6 +18,7 @@ func _ready():
 	var num_of_gamepads = Input.get_connected_joypads().size()
 	var players_to_spawn = 1
 	if num_of_gamepads > 0:
+		print('found a gamepad')
 		players_to_spawn = 2
 	var enemies_to_spawn = 10
 	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn)
@@ -29,10 +30,11 @@ func _process(delta):
 func _on_Beat_timeout():
 	emit_signal("beat")
 
-func spawnPlayer(_spawn_position : Vector2):
+func spawnPlayer(_spawn_position : Vector2, is_first_player : bool):
 	var player = PLAYER.instance()
 	add_child(player)
 	player.set_position( _spawn_position)
+	player.is_first_player = is_first_player
 	connect("beat", player, "_on_Beat_timeout")
 
 
@@ -83,7 +85,10 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
-		spawnPlayer(player_spawn_position)
+		if i > 0:
+			spawnPlayer(player_spawn_position, true)
+		else:
+			spawnPlayer(player_spawn_position, false)
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
 	for i in range(num_of_enemies):
