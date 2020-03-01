@@ -20,4 +20,4 @@ func _on_Beat_timeout():
 	
 	for dir in dirs:
 		if dir == selected_dir:
-			move_tile(dirs[dir], tilesize)
+			move_tile(dirs[dir], 1)
