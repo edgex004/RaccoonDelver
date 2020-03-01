@@ -3,6 +3,7 @@ extends Node2D
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
 const DAMAGEABLE = preload("res://Scenes/Damageable/Damageable.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
+const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 signal beat
 
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
@@ -10,8 +11,20 @@ const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static object
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
 
+var StateMap = Array()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var used_cells = GroundTileMap.get_used_cells()
+	for pos in used_cells:
+		if 1 + pos.x > StateMap.size():
+			for i in range(1 + pos.x-StateMap.size()):
+				StateMap.append([])
+		if 1 + pos.y > StateMap[pos.x].size():
+			for i in range(1 + pos.y-StateMap[pos.x].size()):
+				StateMap[pos.x].append(null)
+		if( GroundTileMap.get_cell(pos.x, pos.y) != 6 ):
+			StateMap[pos.x][pos.y] = PERMANENT.instance()
 	randomize() #New random seed
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
@@ -30,24 +43,31 @@ func _process(delta):
 func _on_Beat_timeout():
 	emit_signal("beat")
 
-func spawnPlayer(_spawn_position : Vector2, is_first_player : bool):
-	var player = PLAYER.instance()
-	add_child(player)
-	player.set_position( _spawn_position)
-	player.is_first_player = is_first_player
-	connect("beat", player, "_on_Beat_timeout")
+func spawnPlayer(x : int, y : int, is_first_player : bool):
+	if (StateMap[x][y] == null):
+		var player = PLAYER.instance()
+		set_tile(x,y,player)
+		add_child(player)
+		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+		player.is_first_player = is_first_player
+		connect("beat", player, "_on_Beat_timeout")
 
 
-func spawnDamageable(_spawn_position : Vector2):
-	var obj = DAMAGEABLE.instance()
-	add_child(obj)
-	obj.set_position( _spawn_position)
-	
-func spawnRandomWalker(_spawn_position : Vector2):
-	var obj = RANDOM_WALKER.instance()
-	add_child(obj)
-	obj.set_position( _spawn_position)
-	connect("beat", obj, "_on_Beat_timeout")
+func spawnDamageable(x : int, y : int):
+	if (StateMap[x][y] == null):
+		var obj = DAMAGEABLE.instance()
+		set_tile(x,y,obj)
+		add_child(obj)
+		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+
+func spawnRandomWalker(x : int, y : int):
+	if (StateMap[x][y] == null):
+		var obj = RANDOM_WALKER.instance()
+		set_tile(x,y,obj)
+		add_child(obj)
+		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+		connect("beat", obj, "_on_Beat_timeout")
+
 
 func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 ) -> void:
 	if !GroundTileMap.tile_set:
@@ -56,7 +76,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	var open_tiles : Array = GroundTileMap.get_used_cells()
 	for tile in GroundTileMap.get_used_cells():
 		#Check if tiles are a wall or near a wall
-		var is_pos_blocked = check_object_placement_blocked( _get_tile_pos(tile, GroundTileMap) )
+		var is_pos_blocked = check_object_placement_blocked(tile)
 		if is_pos_blocked:
 			#Remove walls from the set
 			open_tiles.erase(tile)
@@ -65,9 +85,8 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	while(obj_to_place > 0 and open_tiles.size() > 0):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		var obj_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
 		#assert(not check_object_placement_blocked(selected_tile))
-		spawnDamageable(obj_spawn_position)
+		spawnDamageable(selected_tile.x, selected_tile.y)
 		#Clear the space and any surrounding spaces 
 		open_tiles.erase(selected_tile)
 		open_tiles.erase(selected_tile-Vector2(1,0))
@@ -84,18 +103,16 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(num_of_players):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
 		if i > 0:
-			spawnPlayer(player_spawn_position, true)
+			spawnPlayer(selected_tile.x, selected_tile.y, true)
 		else:
-			spawnPlayer(player_spawn_position, false)
+			spawnPlayer(selected_tile.x, selected_tile.y, false)
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
 	for i in range(num_of_enemies):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		var enemy_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
-		spawnRandomWalker(enemy_spawn_position)
+		spawnRandomWalker(selected_tile.x, selected_tile.y)
 		open_tiles.erase(selected_tile)
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
@@ -104,23 +121,27 @@ func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	return Vector2(cell_x_pos, cell_y_pos)
 
 func check_object_placement_blocked(_location : Vector2) -> bool:
-	# Returns true if the space cannot be moved to because something is there
-	var collision_occured = false
-	#Setup shape query parameters
-	var params = Physics2DShapeQueryParameters.new()
-	params.set_shape_rid(ObjCollisionShape.get_rid())
-	# Set other parameters if needed
-	params.set_collision_layer(MOVEMENT_COLLISION_MASK)
-	params.collide_with_areas = true
-	params.collide_with_bodies = true
-	var placement_transform : Transform2D = self.get_global_transform()
-	placement_transform.origin = _location
-	params.set_transform(placement_transform)
-	var space_state = get_world_2d().direct_space_state
-	#Pick targets
-	var results = space_state.intersect_shape(params, 1)
-	if results:
-		#line of sight to the bottom part of the target is blocked
-		#result contains blocking object info
-		collision_occured = true
-	return collision_occured
+	return StateMap[_location.x][_location.y] != null
+
+func get_object(x:int,y:int) -> Node:
+	if ( x < 0 or y < 0 ): return null
+	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return null
+	return StateMap[x][y]
+
+func set_tile(x:int,y:int,val:Node) -> bool:
+	if ( x < 0 or y < 0 ): return false
+	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return false
+	StateMap[x][y] = val
+	if (is_instance_valid(val)):
+		val.tile_x = x
+		val.tile_y = y
+	return true
+
+func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int) -> bool:
+	if ( from_x < 0 or from_y < 0 ): return false
+	if ( from_x + 1 > StateMap.size() or from_y+1 > StateMap[from_x].size()): return false
+	if ( to_x < 0 or to_y < 0 ): return false
+	if ( to_x + 1 > StateMap.size() or to_y+1 > StateMap[to_x].size()): return false
+	var from = get_object(from_x,from_y)
+	var to = get_object(to_x,to_y)
+	return set_tile(to_x,to_y,from) and set_tile(from_x,from_y,to)

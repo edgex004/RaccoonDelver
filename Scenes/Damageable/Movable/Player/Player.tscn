@@ -5,7 +5,6 @@
 [ext_resource path="res://Scenes/Damageable/Movable/Player/PlayerSkin.svg" type="Texture" id=3]
 
 [node name="Player" instance=ExtResource( 1 )]
-collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="Sprite" parent="." index="1"]

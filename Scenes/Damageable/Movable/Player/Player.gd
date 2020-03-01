@@ -25,7 +25,7 @@ func _process(delta):
 			input_map = player2_inputs
 		for dir in input_map.keys():
 			if Input.is_action_just_pressed(dir):
-				move_tile(input_map[dir], tilesize)
+				move_tile(input_map[dir], 1)
 				has_moved = true
 
 func _on_Beat_timeout():

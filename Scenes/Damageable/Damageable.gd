@@ -1,6 +1,8 @@
 extends Area2D
 
 var tilesize = 32
+var tile_x
+var tile_y
 
 var is_alive = true
 
@@ -29,4 +31,5 @@ func take_damage(damage, source):
 		print("My health = " + str(health))
 		if health <= 0:
 			is_alive = false
+			get_parent().set_tile(tile_x,tile_y,null)
 			queue_free()

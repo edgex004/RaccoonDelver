@@ -25,40 +25,21 @@ func _ready():
 
 func move_tile(dir_vector, movement_size):
 	var cur_pos = get_position()
-	var desired_pos = cur_pos + dir_vector * movement_size
-	if (!check_for_collision(cur_pos,desired_pos)):
+	var desired_tile_x = tile_x + dir_vector.x * movement_size
+	var desired_tile_y = tile_y + dir_vector.y * movement_size
+	var desired_pos = get_parent()._get_tile_pos(Vector2(desired_tile_x,desired_tile_y),get_parent().GroundTileMap)
+	if (!check_for_collision(desired_tile_x,desired_tile_y)):
 		#set_position(desired_pos)
 		move_tween.interpolate_property(self, "position", 
 		cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
 		move_tween.start()
+		get_parent().swap_tile(tile_x, tile_y, desired_tile_x,desired_tile_y)
 
-func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
+func check_for_collision(x:int, y:int) -> bool:
 	# Returns true if the space cannot be moved to because something is there
-	var collision_occured = false
+	var collider = get_parent().get_object(x,y)
+	if (collider == null): return false
 	var space_state = get_world_2d().direct_space_state
-	#Create the ray casts (can collide with bodies or areas)
-	var results = space_state.intersect_ray(cast_from, cast_to, [self], MOVEMENT_COLLISION_MASK, true, true)
-	if results:
-		#line of sight to the bottom part of the target is blocked
-		#result contains blocking object inf
-		if results is Array:
-			for collison_result in results:
-			#Getting the unit directly
-				var unit = collison_result['collider']
-				if 'is_alive' in unit:
-					if !unit.is_alive:
-						#Ignore dead troops
-						continue
-				#Apply damage
-				if unit.has_method('take_damage'):
-					unit.take_damage(damage, self)
-		else:
-			var unit = results['collider']
-			if 'is_alive' in unit:
-				if unit.is_alive:
-					#Apply damage
-					if unit.has_method('take_damage'):
-						unit.take_damage(damage, self)
-				#else do nothing (ignore dead troops)
-		collision_occured = true
-	return collision_occured
+	if is_instance_valid(collider) and 'is_alive' in collider and collider.is_alive and collider.has_method('take_damage'):
+		collider.take_damage(damage, self)
+	return true
