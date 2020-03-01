@@ -31,5 +31,5 @@ func take_damage(damage, source):
 		print("My health = " + str(health))
 		if health <= 0:
 			is_alive = false
-			get_parent().set_tile(tile_x,tile_y,null)
+			get_node('/root/Level').set_tile(tile_x,tile_y,null)
 			queue_free()
