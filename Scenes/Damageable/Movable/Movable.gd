@@ -10,6 +10,9 @@ export (float) var damage = 40
 var my_size
 
 
+# Leveling stats
+export var level = 1
+
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -43,7 +46,7 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 				blocking_object.take_damage(damage, self)
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
-	# Returns true if the space cannot be moved to because something is there
+	#Returns the blocking object
 	if movement_size <= 0:
 		return null
 	for n in range(movement_size):
@@ -53,3 +56,6 @@ func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 		var blocking_object = get_node('/root/Level').get_object(desired_tile_x,desired_tile_y)
 		if blocking_object:
 			return blocking_object
+
+func get_level():
+	return level

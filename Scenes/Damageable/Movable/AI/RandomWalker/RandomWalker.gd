@@ -9,9 +9,9 @@ var dirs = {0: Vector2.LEFT,
 #var screensize
 
 func _ready():
-	#screensize = get_viewport().get_size()
-	#set_position(screensize/2)
-	pass
+	damage = 10
+	exp_on_kill_scaler = 0.65
+	set_level(1)
 
 
 func _on_Beat_timeout():

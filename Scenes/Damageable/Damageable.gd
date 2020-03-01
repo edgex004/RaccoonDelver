@@ -9,6 +9,7 @@ var is_alive = true
 
 var health = 100.0
 var health_max = 100.0
+var experience_on_kill = 0
 
 const BACKGROUND_COL_MASK = 1 # 2^0
 const PLAYER_COL_MASK = 2 # 2^1
@@ -36,5 +37,9 @@ func take_damage(damage, source):
 		print("My health = " + str(health))
 		if health <= 0:
 			is_alive = false
+			# Send experience to the attacker
+			if source.has_method('gain_experience'):
+				source.gain_experience(experience_on_kill)
+			
 			get_node('/root/Level').set_tile(tile_x,tile_y,null)
 			$Damage.connect("finished", self, "queue_free")
