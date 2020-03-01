@@ -14,12 +14,14 @@ onready var GroundTileMap : TileMap = $GroundTileMap
 func _ready():
 	randomize() #New random seed
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
-	spawn_random_objects(30)
+	var objects_to_spawn = 30
+	var players_to_spawn = 1
+	var enemies_to_spawn = 10
+	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_action_just_pressed("ui_accept"):
-		print(check_object_placement_blocked(get_global_mouse_position()))
+	pass
 
 func _on_Beat_timeout():
 	emit_signal("beat")
