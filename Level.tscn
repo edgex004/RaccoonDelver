@@ -16,6 +16,8 @@ script = ExtResource( 2 )
 [node name="Music" type="AudioStreamPlayer" parent="Beat"]
 stream = ExtResource( 4 )
 
+[node name="Player" type="Node2D" parent="."]
+
 [node name="GroundTileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 3 )
 cell_size = Vector2( 32, 32 )

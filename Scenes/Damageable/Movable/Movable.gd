@@ -40,8 +40,7 @@ func check_for_collision(cast_from : Vector2, cast_to : Vector2) -> bool:
 	var results = space_state.intersect_ray(cast_from, cast_to, [self], MOVEMENT_COLLISION_MASK, true, true)
 	if results:
 		#line of sight to the bottom part of the target is blocked
-		#result contains blocking object info
-		
+		#result contains blocking object inf
 		if results is Array:
 			for collison_result in results:
 			#Getting the unit directly
