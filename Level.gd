@@ -85,10 +85,10 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var player_spawn_position = _get_tile_pos(selected_tile, GroundTileMap)
+		var is_first_player = true
 		if i > 0:
-			spawnPlayer(player_spawn_position, true)
-		else:
-			spawnPlayer(player_spawn_position, false)
+			is_first_player = false
+		spawnPlayer(player_spawn_position, is_first_player)
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
 	for i in range(num_of_enemies):
