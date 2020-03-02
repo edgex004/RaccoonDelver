@@ -13,9 +13,9 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
-onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/ExperienceBar/TextureProgress
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1ExpBar/ExperienceBar
 onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
-onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/ExperienceBar/TextureProgress
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2ExpBar/ExperienceBar
 onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store
@@ -33,7 +33,7 @@ func _ready():
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
-	var players_to_spawn = 1
+	var players_to_spawn = 2
 	if num_of_gamepads > 0:
 		print('found a gamepad')
 		players_to_spawn = 2

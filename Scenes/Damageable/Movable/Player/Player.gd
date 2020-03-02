@@ -69,9 +69,9 @@ func gain_experience(value):
 	var growth_data = []
 	while experience >= experience_required:
 		experience -= experience_required
-		growth_data.append([is_first_player, experience_required, experience_required])
+		growth_data.append([experience_required, experience_required])
 		level_up()
-	growth_data.append([is_first_player, experience, experience_required])
+	growth_data.append([experience, experience_required])
 	emit_signal("player_experience_gained", growth_data)
 
 func level_up():
