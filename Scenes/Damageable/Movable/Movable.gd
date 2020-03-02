@@ -3,12 +3,13 @@ extends Damageable
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
 onready var move_tween = $MoveTween
+onready var size_tween = $SizeTween
 
-export (float) var move_time = 0.1 # seconds
+export (float) var move_time = 1 # seconds
 export (float) var damage = 40
 
 var my_size
-
+var scale_direction
 
 # Leveling stats
 export var level = 1
@@ -20,6 +21,7 @@ export var level = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+#	$SizeTween.connect("tween_completed", self, "tween_completed")
 	pass
 
 
@@ -46,6 +48,8 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 		move_tween.interpolate_property(self, "position", 
 		cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
 		move_tween.start()
+#		size_tween.interpolate_property(self, "transform/scale", Vector2(1,1), Vector2(1.5,1.5), move_time/2.0, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+#		size_tween.start()
 		get_node('/root/Level').swap_tile(tile_x, tile_y, desired_tile_x,desired_tile_y)
 	else:
 		if blocking_object and is_instance_valid(blocking_object):
@@ -70,3 +74,18 @@ func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 
 func get_level():
 	return level
+
+
+
+func growShrinkSprite(spriteName, tweenName, scaleDown, scaleUp, seconds):
+	tweenName.interpolate_property(spriteName, "transform/scale", Vector2(scaleDown,scaleDown), Vector2(scaleUp,scaleUp), seconds, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tweenName.start()
+
+#once the tween has complete its execution and finished, start it off again, this time reversed
+#func tween_completed( object, key ):
+#	if scale_direction == "up":
+#		size_tween.interpolate_property(self, "transform/scale", Vector2(1.5,1.5), Vector2(1,1), move_time/2.0, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+#		size_tween.start()
+#		scale_direction = "down"
+#	else:
+#		scale_direction = "up"

@@ -25,7 +25,7 @@ shape = SubResource( 1 )
 [node name="Damage" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 2 )
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="."]
 process_priority = 1
 margin_left = -11.0
 margin_top = -16.0

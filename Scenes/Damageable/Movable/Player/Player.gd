@@ -108,7 +108,7 @@ func level_up():
 	update_player_stats()
 	#restore health to full on leveling
 	health = health_max
-	$ProgressBar.hide()
+	$HealthBar.hide()
 
 func update_player_stats():
 	health_max = health_base + health_lin_coef * (level-1)
