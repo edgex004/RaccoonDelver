@@ -28,6 +28,10 @@ func _ready():
 
 
 func _on_Beat_timeout():
+	# Don't take an action if we're already dead
+	if not is_alive:
+		return
+	
 	#print("Beat Happened...")
 	if randf() < 0.6:
 		#Hunt the player

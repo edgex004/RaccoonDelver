@@ -36,6 +36,10 @@ func _ready():
 #	pass
 
 func _on_Beat_timeout():
+	# Don't take an action if we're already dead
+	if not is_alive:
+		return
+	
 	if not beat_counter % BEAT_CYCLE:
 		var target_player = null
 		var my_pos = get_position()
@@ -79,6 +83,7 @@ func _on_Beat_timeout():
 			MOVEMENT_COLLISION_MASK, true, true)
 			if result:
 				# if we're going to hit the player, actually do it
+				
 				if not result['collider'].get_collision_mask() == PLAYER_COL_MASK:
 					# if we were going to hit a wall, move on the opposite axis
 					var rand_mover = rand_range(-0.001, 0.001)
@@ -87,7 +92,6 @@ func _on_Beat_timeout():
 						selected_dir = sign(dir_to_target.x+rand_mover) * Vector2.RIGHT
 					else:
 						selected_dir = sign(dir_to_target.y+rand_mover) * Vector2.DOWN
-			#print("Dir:" + str(selected_dir))
 			# make the  move
 			move_tile(selected_dir, 1)
 	beat_counter = (beat_counter + 1) % BEAT_CYCLE

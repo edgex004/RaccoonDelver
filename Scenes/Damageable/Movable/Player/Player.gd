@@ -44,7 +44,7 @@ func _ready():
 
 
 func _process(delta):
-	if not (has_moved):
+	if is_alive and not (has_moved):
 		var input_map = player1_inputs
 		if not is_first_player:
 			input_map = player2_inputs
