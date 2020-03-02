@@ -14,9 +14,9 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
-onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/ExperienceBar/TextureProgress
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1ExpBar/ExperienceBar
 onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
-onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/ExperienceBar/TextureProgress
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2ExpBar/ExperienceBar
 onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store

@@ -27,6 +27,10 @@ func _ready():
 
 
 func _on_Beat_timeout():
+	# Don't take an action if we're already dead
+	if not is_alive:
+		return
+	
 	if check_for_collision(locked_dir, 1):
 		if randf() < 0.5:
 			#Hunt the player

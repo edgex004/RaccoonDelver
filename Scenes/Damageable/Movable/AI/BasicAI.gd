@@ -34,4 +34,3 @@ func set_level(set_level): # note getter defined in Moveable
 	health_max = round((health_lin_coef * (level-1) + pow(level-1, health_pow_coef) + 
 					health_base) * health_scaler)
 	health = health_max
-	print("My damage: " + str(damage))
