@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Permanent/FloorDoor/FloorDoorOpen.svg" type="Texture" id=1]
+[ext_resource path="res://Scenes/Permanent/FloorDoor/FloorDoor.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/Permanent/FloorDoor/FloorDoorClosed.svg" type="Texture" id=3]
+
+[node name="FloorDoor" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Open" type="TextureRect" parent="."]
+visible = false
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Closed" type="TextureRect" parent="."]
+visible = false
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

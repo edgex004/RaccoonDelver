@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scenes/Damageable/Damageable.gd"
 }, {
+"base": "Permanent",
+"class": "FloorDoor",
+"language": "GDScript",
+"path": "res://Scenes/Permanent/FloorDoor/FloorDoor.gd"
+}, {
+"base": "Node2D",
+"class": "Permanent",
+"language": "GDScript",
+"path": "res://Scenes/Permanent/Permanent.gd"
+}, {
 "base": "",
 "class": "Player",
 "language": "GDScript",
@@ -21,6 +31,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Damageable": "",
+"FloorDoor": "",
+"Permanent": "",
 "Player": ""
 }
 

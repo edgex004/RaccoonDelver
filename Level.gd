@@ -4,6 +4,7 @@ const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 const CHASER = preload("res://Scenes/Damageable/Movable/AI/Chaser/Chaser.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
+const FLOORDOOR = preload("res://Scenes/Permanent/FloorDoor/FloorDoor.tscn")
 const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
@@ -12,21 +13,15 @@ signal beat
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
 
+var obj_to_place_store
+var num_of_enemies_store
+var num_of_players_store
 var StateMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Globals.current_level = self
-	var used_cells = GroundTileMap.get_used_cells()
-	for pos in used_cells:
-		if 1 + pos.x > StateMap.size():
-			for i in range(1 + pos.x-StateMap.size()):
-				StateMap.append([])
-		if 1 + pos.y > StateMap[pos.x].size():
-			for i in range(1 + pos.y-StateMap[pos.x].size()):
-				StateMap[pos.x].append(null)
-		if( GroundTileMap.get_cell(pos.x, pos.y) != 6 ):
-			StateMap[pos.x][pos.y] = PERMANENT.instance()
+
 	randomize() #New random seed
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
@@ -53,6 +48,7 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		player.is_first_player = is_first_player
 		connect("beat", player, "_on_Beat_timeout")
+		player.connect("hit_floor_door", self, "next_level")
 		if is_first_player:
 			Globals.player_one = player
 		else: 
@@ -82,12 +78,46 @@ func spawnChaser(x : int, y : int):
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
 
+func spawnExit(x : int, y : int):
+	if (StateMap[x][y] == null):
+		var obj = FLOORDOOR.instance()
+		set_tile(x,y,obj)
+		get_node("YSort").add_child(obj)
+		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
-func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 ) -> void:
+func next_level():
+	var old_players = clear_map()
+	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, old_players)
+
+func clear_map() -> Array:
+	var players = []
+	for x in range(StateMap.size()):
+		for y in range(StateMap[x].size()):
+			if is_instance_valid(StateMap[x][y]):
+				if StateMap[x][y].is_class("Player"):
+					players.append(StateMap[x][y])
+				else:
+					StateMap[x][y].queue_free()
+			StateMap[x][y] = null
+	return players
+
+func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 , players: Array = []) -> void:
+	obj_to_place_store = obj_to_place
+	num_of_enemies_store = num_of_enemies
+	num_of_players_store = num_of_players
 	if !GroundTileMap.tile_set:
 		return
 	#Get all tiles
 	var open_tiles : Array = GroundTileMap.get_used_cells()
+	for pos in open_tiles:
+		if 1 + pos.x > StateMap.size():
+			for i in range(1 + pos.x-StateMap.size()):
+				StateMap.append([])
+		if 1 + pos.y > StateMap[pos.x].size():
+			for i in range(1 + pos.y-StateMap[pos.x].size()):
+				StateMap[pos.x].append(null)
+		if( GroundTileMap.get_cell(pos.x, pos.y) != 6 ):
+			StateMap[pos.x][pos.y] = PERMANENT.instance()
 	for tile in GroundTileMap.get_used_cells():
 		#Check if tiles are a wall or near a wall
 		var is_pos_blocked = check_object_placement_blocked(tile)
@@ -112,13 +142,16 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		open_tiles.erase(selected_tile-Vector2(-1,1))
 		open_tiles.erase(selected_tile-Vector2(-1,-1))
 		obj_to_place -= 1
-	assert(open_tiles.size() > num_of_players + num_of_enemies)
+	assert(open_tiles.size() > num_of_players + num_of_enemies + 1)
 	# Spawn player
 	for i in range(num_of_players):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var is_first_player = (i == 0)
-		spawnPlayer(selected_tile.x, selected_tile.y, is_first_player)
+		if i+1 > players.size():
+			spawnPlayer(selected_tile.x, selected_tile.y, is_first_player)
+		else:
+			set_tile(selected_tile.x, selected_tile.y,players[i])
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
 	for i in range(num_of_enemies):
@@ -129,7 +162,10 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		else:
 			spawnChaser(selected_tile.x, selected_tile.y)
 		open_tiles.erase(selected_tile)
-	
+	var rand_index = randi() % open_tiles.size()
+	var selected_tile = open_tiles[rand_index]
+	spawnExit(selected_tile.x, selected_tile.y)
+	open_tiles.erase(selected_tile)
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_x_pos : float = float(_tile_cords.x*_tile_map.cell_size.x) + _tile_map.position.x + float(_tile_map.cell_size.x)/2.0

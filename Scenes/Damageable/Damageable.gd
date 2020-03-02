@@ -33,6 +33,8 @@ func take_damage(damage, source):
 		$ProgressBar.show()
 		$ProgressBar.value = 100.0 * health/health_max
 		$Damage.play()
+		print("damaged by: " + str(source.get_class()))
+		print("IAMA: " + str(self.get_class()))
 		print("My health = " + str(health))
 		if health <= 0:
 			is_alive = false

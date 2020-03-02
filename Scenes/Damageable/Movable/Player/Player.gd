@@ -1,5 +1,7 @@
 extends "../Movable.gd"
 class_name Player
+func is_class(type): return type == "Player" or .is_class(type)
+func    get_class(): return "Player"
 
 var beat_counter = 0
 var is_first_player : bool = true

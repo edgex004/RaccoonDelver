@@ -4,7 +4,7 @@ const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static object
 
 onready var move_tween = $MoveTween
 export var move_time = 0.1 # seconds
-
+signal hit_floor_door
 var my_size
 var damage = 40
 
@@ -40,6 +40,10 @@ func check_for_collision(x:int, y:int) -> bool:
 	var collider = get_node('/root/Level').get_object(x,y)
 	if (collider == null): return false
 	var space_state = get_world_2d().direct_space_state
-	if is_instance_valid(collider) and 'is_alive' in collider and collider.is_alive and collider.has_method('take_damage'):
-		collider.take_damage(damage, self)
+	if is_instance_valid(collider):
+		if 'is_alive' in collider and collider.is_alive and collider.has_method('take_damage'):
+			collider.take_damage(damage, self)
+		elif (collider.is_class("FloorDoor") and collider.is_open):
+			emit_signal("hit_floor_door")
+			return false
 	return true
