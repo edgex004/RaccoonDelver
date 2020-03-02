@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Item/Chest.svg" type="Texture" id=1]
+[ext_resource path="res://Scenes/Item/Item.gd" type="Script" id=2]
+
+[node name="Item" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="TextureRect" parent="."]
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
