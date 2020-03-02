@@ -3,6 +3,7 @@ extends Node2D
 const PLAYER = preload("res://Scenes/Damageable/Movable/Player/Player.tscn")
 const RANDOM_WALKER = preload("res://Scenes/Damageable/Movable/AI/RandomWalker/RandomWalker.tscn")
 const CHASER = preload("res://Scenes/Damageable/Movable/AI/Chaser/Chaser.tscn")
+const FLOATER = preload("res://Scenes/Damageable/Movable/AI/Floater/Floater.tscn")
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 const FLOORDOOR = preload("res://Scenes/Permanent/FloorDoor/FloorDoor.tscn")
 const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
@@ -12,6 +13,10 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/ExperienceBar/TextureProgress
+onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/ExperienceBar/TextureProgress
+onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store
 var num_of_enemies_store
@@ -21,6 +26,8 @@ var StateMap = Array()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Globals.current_level = self
+	# hide player 2 GUI until we need it
+	Player2GUI.visible = false
 
 	randomize() #New random seed
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
@@ -51,8 +58,19 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 		player.connect("hit_floor_door", self, "next_level")
 		if is_first_player:
 			Globals.player_one = player
+			player.connect("player_experience_gained", Player1ExpBar, 
+				"on_player_experience_gain")
+			Player1ExpBar.initialize(player.experience, player.experience_required)
 		else: 
 			Globals.player_two = player
+			Player2GUI.visible = true
+			Player2ExpBar.is_first_player = false
+			player.connect("player_experience_gained", Player2ExpBar, 
+				"on_player_experience_gain")
+			Player2ExpBar.initialize(player.experience, player.experience_required)
+		
+		# init experience bars
+		
 
 
 func spawnDamageable(x : int, y : int):
@@ -62,17 +80,9 @@ func spawnDamageable(x : int, y : int):
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
-func spawnRandomWalker(x : int, y : int):
+func spawnEnemy(x : int, y : int, _resource):
 	if (StateMap[x][y] == null):
-		var obj = RANDOM_WALKER.instance()
-		set_tile(x,y,obj)
-		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
-		connect("beat", obj, "_on_Beat_timeout")
-
-func spawnChaser(x : int, y : int):
-	if (StateMap[x][y] == null):
-		var obj = CHASER.instance()
+		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
@@ -157,10 +167,13 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(num_of_enemies):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		if randi() % 100 > 30:
-			spawnRandomWalker(selected_tile.x, selected_tile.y)
+		var rand_chance = randf()
+		if rand_chance < 0.33:
+			spawnEnemy(selected_tile.x, selected_tile.y, RANDOM_WALKER)
+		elif rand_chance < 0.66:
+			spawnEnemy(selected_tile.x, selected_tile.y, FLOATER)
 		else:
-			spawnChaser(selected_tile.x, selected_tile.y)
+			spawnEnemy(selected_tile.x, selected_tile.y, CHASER)
 		open_tiles.erase(selected_tile)
 	var rand_index = randi() % open_tiles.size()
 	var selected_tile = open_tiles[rand_index]

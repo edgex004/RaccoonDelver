@@ -15,9 +15,21 @@ var dirs = {0: Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	damage = 10
-	#get_node("SearchRange/SearchCollision").set_shape()
-
+	exp_on_kill_scaler = 0.85
+	
+	# Damage variables
+	damage_lin_coef = 3
+	damage_pow_coef = 1.6
+	damage_base = 20
+	damage_scaler = 1
+	
+	# Health variables
+	health_lin_coef = 12.5
+	health_pow_coef = 2
+	health_base = 10
+	health_scaler = 1
+	
+	set_level(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

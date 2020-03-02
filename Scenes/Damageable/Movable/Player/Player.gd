@@ -6,6 +6,27 @@ func    get_class(): return "Player"
 var beat_counter = 0
 var is_first_player : bool = true
 
+# Levelling stats
+# export var level = 1 (defined in Moveable)
+export var experience = 0
+
+# Experience required equation: a * level + level ^ b + base
+var exp_req_lin_coef = 7.5
+var exp_req_pow_coef = 2.25
+var exp_req_base = 50
+var experience_required = _get_experience_required(level + 1)
+var experience_total = 0
+
+# Damage variables
+var damage_lin_coef = 10
+var damage_base = 10
+
+# Health variables
+var health_lin_coef = 10
+var health_base = 100
+
+signal player_experience_gained(growth_data)
+
 var has_moved = false
 var player1_inputs = {"player1_left": Vector2.LEFT,
 						"player1_right": Vector2.RIGHT,
@@ -18,7 +39,8 @@ var player2_inputs = {"player2_left": Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	damage = 100
+	update_player_stats()
+	health = health_max
 
 
 func _process(delta):
@@ -36,3 +58,33 @@ func _on_Beat_timeout():
 	print("Beat Happened" + beats_dict[beat_counter])
 	beat_counter = (beat_counter + 1) % 3
 	has_moved = false
+
+
+func _get_experience_required(level):
+	return round(pow(level, exp_req_pow_coef) + level * exp_req_lin_coef + exp_req_base)
+	
+func gain_experience(value):
+	experience += value
+	experience_total += value
+	var growth_data = []
+	while experience >= experience_required:
+		experience -= experience_required
+		growth_data.append([is_first_player, experience_required, experience_required])
+		level_up()
+	growth_data.append([is_first_player, experience, experience_required])
+	emit_signal("player_experience_gained", growth_data)
+
+func level_up():
+	level += 1
+	experience_required = _get_experience_required(level + 1)
+	#var stats = ['damage', 'health_max']
+	#var random_stat = stats[randi() % stats.size()]
+	#set(random_stat, get(random_stat) + 1)
+	update_player_stats()
+	#restore health to full on leveling
+	health = health_max
+	$ProgressBar.hide()
+
+func update_player_stats():
+	health_max = health_base + health_lin_coef * (level-1)
+	damage = damage_base + damage_lin_coef * (level-1)
