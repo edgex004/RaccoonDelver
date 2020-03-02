@@ -1,5 +1,6 @@
 extends "../Movable.gd"
 class_name Player
+
 func is_class(type): return type == "Player" or .is_class(type)
 func    get_class(): return "Player"
 
@@ -25,7 +26,10 @@ var damage_base = 10
 var health_lin_coef = 10
 var health_base = 100
 
+var items = []
+
 signal player_experience_gained(growth_data)
+signal hit_floor_door
 
 var has_moved = false
 var player1_inputs = {"player1_left": Vector2.LEFT,
@@ -42,7 +46,28 @@ func _ready():
 	update_player_stats()
 	health = health_max
 
-
+func pick_up_item(item: Node) -> bool:
+	#Returns true if item was picked up. Base type does not pick up.
+	items.push_back(item)
+	item.hide()
+	item.get_parent().remove_child(item)
+	add_child(item)
+	get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null)
+	return true
+	
+func open_door(door: Node):
+	# If your player/monster can do this, override
+	if door.is_open:
+		emit_signal("hit_floor_door")
+	else:
+		for i in range(items.size()):
+			if is_instance_valid(items[i]) and items[i].type == Globals.ItemType.key:
+				door.set_open(true)
+				items[i].queue_free()
+				items.remove(i)
+				break
+	pass
+	
 func _process(delta):
 	if not (has_moved):
 		var input_map = player1_inputs

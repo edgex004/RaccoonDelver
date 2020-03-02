@@ -45,3 +45,8 @@ func take_damage(damage, source):
 			
 			get_node('/root/Level').set_tile(tile_x,tile_y,null)
 			$Damage.connect("finished", self, "queue_free")
+
+func place_tile(x:int, y:int):
+	tile_x = x
+	tile_y = y
+	show()

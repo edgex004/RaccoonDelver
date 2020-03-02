@@ -5,7 +5,10 @@ var player_two : Player
 
 var current_level
 
-
+enum ItemType {
+	key,
+	chest
+}
 
 
 

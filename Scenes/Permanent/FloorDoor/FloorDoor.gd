@@ -1,5 +1,6 @@
 extends Permanent
 class_name FloorDoor
+
 func is_class(type): return type == "FloorDoor" or .is_class(type)
 func    get_class(): return "FloorDoor"
 
@@ -12,7 +13,7 @@ var is_open
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	set_open(true)
+	set_open(false)
 	pass # Replace with function body.
 
 

@@ -7,6 +7,7 @@ const FLOATER = preload("res://Scenes/Damageable/Movable/AI/Floater/Floater.tscn
 const PERMANENT = preload("res://Scenes/Permanent/Permanent.tscn")
 const FLOORDOOR = preload("res://Scenes/Permanent/FloorDoor/FloorDoor.tscn")
 const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
+const ITEM = preload('res://Scenes/Item/Item.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
 signal beat
@@ -95,7 +96,16 @@ func spawnExit(x : int, y : int):
 		get_node("YSort").add_child(obj)
 		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
+func spawnItem(x : int, y : int, type):
+	if (StateMap[x][y] == null):
+		var obj = ITEM.instance()
+		obj.type = Globals.ItemType.key
+		set_tile(x,y,obj)
+		get_node("YSort").add_child(obj)
+		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+
 func next_level():
+	get_node("Beat").set_up_music(5)
 	var old_players = clear_map()
 	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, old_players)
 
@@ -152,7 +162,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		open_tiles.erase(selected_tile-Vector2(-1,1))
 		open_tiles.erase(selected_tile-Vector2(-1,-1))
 		obj_to_place -= 1
-	assert(open_tiles.size() > num_of_players + num_of_enemies + 1)
+	assert(open_tiles.size() > num_of_players + num_of_enemies + 2)
 	# Spawn player
 	for i in range(num_of_players):
 		var rand_index = randi() % open_tiles.size()
@@ -175,9 +185,15 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		else:
 			spawnEnemy(selected_tile.x, selected_tile.y, CHASER)
 		open_tiles.erase(selected_tile)
+	
 	var rand_index = randi() % open_tiles.size()
 	var selected_tile = open_tiles[rand_index]
 	spawnExit(selected_tile.x, selected_tile.y)
+	open_tiles.erase(selected_tile)
+	
+	rand_index = randi() % open_tiles.size()
+	selected_tile = open_tiles[rand_index]
+	spawnItem(selected_tile.x, selected_tile.y, Globals.ItemType.key)
 	open_tiles.erase(selected_tile)
 
 func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
@@ -193,13 +209,16 @@ func get_object(x:int,y:int) -> Node:
 	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return null
 	return StateMap[x][y]
 
-func set_tile(x:int,y:int,val:Node) -> bool:
+func set_tile(x:int,y:int,val:Node,hide_tile:bool=false) -> bool:
 	if ( x < 0 or y < 0 ): return false
 	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return false
 	StateMap[x][y] = val
 	if (is_instance_valid(val)):
 		val.tile_x = x
 		val.tile_y = y
+		val.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+		if hide_tile: val.hide()
+		else: val.show()
 	return true
 
 func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int) -> bool:
@@ -210,3 +229,6 @@ func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int) -> bool:
 	var from = get_object(from_x,from_y)
 	var to = get_object(to_x,to_y)
 	return set_tile(to_x,to_y,from) and set_tile(from_x,from_y,to)
+
+func map_tile_to_global(x:int, y:int):
+	_get_tile_pos(Vector2(x,y),GroundTileMap)
