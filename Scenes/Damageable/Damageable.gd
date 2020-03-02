@@ -1,6 +1,8 @@
 extends Area2D
 class_name Damageable 
 
+const DAMAGE_LABEL = preload("res://Scenes/DisapearingLabel/DisapearingLabel.tscn")
+
 var tilesize = 32
 var tile_x
 var tile_y
@@ -34,6 +36,11 @@ func take_damage(damage, source):
 		$HealthBar.show()
 		$HealthBar.value = 100.0 * health/health_max
 		$Damage.play()
+		var label = DAMAGE_LABEL.instance()
+		label.set_size(Vector2(32,16))
+		label.add_text( "-" + str(damage))
+		add_child(label)
+		
 		print("damaged by: " + str(source.get_class()))
 		print("IAMA: " + str(self.get_class()))
 		print("My health = " + str(health))

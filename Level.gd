@@ -216,7 +216,7 @@ func set_tile(x:int,y:int,val:Node,hide_tile:bool=false) -> bool:
 	if (is_instance_valid(val)):
 		val.tile_x = x
 		val.tile_y = y
-		val.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+#		val.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		if hide_tile: val.hide()
 		else: val.show()
 	return true
@@ -231,4 +231,4 @@ func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int) -> bool:
 	return set_tile(to_x,to_y,from) and set_tile(from_x,from_y,to)
 
 func map_tile_to_global(x:int, y:int):
-	_get_tile_pos(Vector2(x,y),GroundTileMap)
+	return _get_tile_pos(Vector2(x,y),GroundTileMap)
