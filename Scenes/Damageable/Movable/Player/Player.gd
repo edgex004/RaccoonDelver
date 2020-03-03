@@ -29,6 +29,7 @@ var health_base = 100
 var items = []
 
 signal player_experience_gained(growth_data)
+signal health_change(health_data)
 signal hit_floor_door
 
 var has_moved = false
@@ -108,8 +109,11 @@ func level_up():
 	update_player_stats()
 	#restore health to full on leveling
 	health = health_max
-	$HealthBar.hide()
+	update_health_status()
 
 func update_player_stats():
 	health_max = health_base + health_lin_coef * (level-1)
 	damage = damage_base + damage_lin_coef * (level-1)
+
+func update_health_status():
+	emit_signal("health_change", [health, health_max])

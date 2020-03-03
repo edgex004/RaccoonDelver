@@ -33,9 +33,10 @@ func take_damage(damage, source):
 	if not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
 		health -= damage
-		$HealthBar.show()
-		$HealthBar.value = 100.0 * health/health_max
-		$Damage.play()
+		update_health_status()
+#		$HealthBar.show()
+#		$HealthBar.value = 100.0 * health/health_max
+#		$Damage.play()
 		var label = DAMAGE_LABEL.instance()
 		label.set_size(Vector2(32,16))
 		label.add_text( "-" + str(damage))
@@ -57,3 +58,6 @@ func place_tile(x:int, y:int):
 	tile_x = x
 	tile_y = y
 	show()
+
+func update_health_status():
+	pass

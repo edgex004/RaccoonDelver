@@ -14,9 +14,11 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
-onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1ExpBar/ExperienceBar
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/Player1ExpContainer/ExperienceBar
+onready var Player1HpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/Player1HPContainer/HealthBar
 onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
-onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2ExpBar/ExperienceBar
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/Player2ExpContainer/ExperienceBar
+onready var Player2HpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/Player2HPContainer/HealthBar
 onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store
@@ -34,7 +36,7 @@ func _ready():
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
-	var players_to_spawn = 1
+	var players_to_spawn = 2
 	if num_of_gamepads > 0:
 		print('found a gamepad')
 		players_to_spawn = 2
@@ -62,6 +64,8 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			player.connect("player_experience_gained", Player1ExpBar, 
 				"on_player_experience_gain")
 			Player1ExpBar.initialize(player.experience, player.experience_required)
+			player.connect("health_change", Player1HpBar, "on_player_health_change")
+			Player1HpBar.initialize(player.health, player.health_max)
 		else: 
 			Globals.player_two = player
 			Player2GUI.visible = true
@@ -69,6 +73,8 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			player.connect("player_experience_gained", Player2ExpBar, 
 				"on_player_experience_gain")
 			Player2ExpBar.initialize(player.experience, player.experience_required)
+			player.connect("health_change", Player2HpBar, "on_player_health_change")
+			Player2HpBar.initialize(player.health, player.health_max)
 		
 		# init experience bars
 		
