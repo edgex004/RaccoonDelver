@@ -26,9 +26,13 @@ var health_scaler = 1
 
 var queued_move : Vector2 = Vector2.ZERO
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	set_level(1)
+	treasures = [Globals.ItemType.potion]
+	treasure_rates = [.5]
 
 
 func set_level(set_level): # note getter defined in Moveable

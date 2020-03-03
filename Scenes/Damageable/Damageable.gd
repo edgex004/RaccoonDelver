@@ -2,6 +2,7 @@ extends Area2D
 class_name Damageable 
 
 const DAMAGE_LABEL = preload("res://Scenes/DisapearingLabel/DisapearingLabel.tscn")
+const ITEM = preload("res://Scenes/Item/Item.tscn")
 
 var tilesize = 32
 var tile_x
@@ -17,6 +18,8 @@ const BACKGROUND_COL_MASK = 1 # 2^0
 const PLAYER_COL_MASK = 2 # 2^1
 const ENEMY_COL_MASK = 4 # 2^2
 
+var treasures = []
+var treasure_rates = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -53,7 +56,18 @@ func take_damage(damage, source):
 			
 			get_node('/root/Level').set_tile(tile_x,tile_y,null)
 			$Damage.connect("finished", self, "queue_free")
-
+			
+			if (treasures.size() > 0):
+				assert (treasures.size() == treasure_rates.size())
+				var num = randf()
+				var sum = 0
+				for i in range(treasure_rates.size()):
+					sum += treasure_rates[i]
+					if num < sum:
+						var dropped_item = ITEM.instance()
+						dropped_item.type = treasures[i]
+						get_node('/root/Level').set_tile(tile_x,tile_y,dropped_item,true)
+						get_node('/root/Level/YSort').add_child(dropped_item)
 func place_tile(x:int, y:int):
 	tile_x = x
 	tile_y = y

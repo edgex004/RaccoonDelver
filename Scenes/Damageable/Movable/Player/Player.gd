@@ -4,6 +4,8 @@ class_name Player
 func is_class(type): return type == "Player" or .is_class(type)
 func    get_class(): return "Player"
 
+const DISAPEAR_LABEL = preload("res://Scenes/DisapearingLabel/DisapearingLabel.tscn")
+
 var beat_counter = 0
 var is_first_player : bool = true
 
@@ -26,7 +28,10 @@ var damage_base = 10
 var health_lin_coef = 10
 var health_base = 100
 
+var max_items = 3
 var items = []
+var item_guis
+var selected_item = 0
 
 signal player_experience_gained(growth_data)
 signal health_change(health_data)
@@ -46,15 +51,29 @@ var player2_inputs = {"player2_left": Vector2.LEFT,
 func _ready():
 	update_player_stats()
 	health = health_max
+	for i in range(max_items): items.push_back(null)
+	item_guis[0].set_selected(true)
 
 func pick_up_item(item: Node) -> bool:
 	#Returns true if item was picked up. Base type does not pick up.
-	items.push_back(item)
-	item.hide()
-	item.get_parent().remove_child(item)
-	add_child(item)
-	get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null)
-	return true
+	for i in range(items.size()-1):
+		if items[i] == null:
+			items[i]=item
+			item.get_parent().remove_child(item)
+			if i > item_guis.size() - 1:
+				item.hide()
+				add_child(item)
+			else:
+				item_guis[i].add_child(item)
+				item.show()
+				item.set_position(item_guis[i].get_rect().size/2)
+			get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null)
+			var label = DISAPEAR_LABEL.instance()
+			label.set_size(Vector2(64,16))
+			label.add_text(item.type_string() + "!")
+			add_child(label)
+			return true
+	return false
 	
 func open_door(door: Node):
 	# If your player/monster can do this, override
@@ -65,19 +84,34 @@ func open_door(door: Node):
 			if is_instance_valid(items[i]) and items[i].type == Globals.ItemType.key:
 				door.set_open(true)
 				items[i].queue_free()
-				items.remove(i)
+				items[i]=null
 				break
 	pass
 	
 func _process(delta):
-	if is_alive and not (has_moved):
+	if !is_alive: return
+	var next_item = "player1_next_item"
+	if not is_first_player:
+		next_item = "player2_next_item"
+	if Input.is_action_just_pressed(next_item):
+		for index in item_guis: index.set_selected(false)
+		selected_item = (selected_item + 1) % max_items
+		item_guis[selected_item].set_selected(true)
+	if not (has_moved):
 		var input_map = player1_inputs
+		var use_item = "player1_use_item"
 		if not is_first_player:
 			input_map = player2_inputs
+			use_item = "player2_use_item"
 		for dir in input_map.keys():
 			if Input.is_action_pressed(dir):
 				move_tile(input_map[dir], 1)
 				has_moved = true
+		if Input.is_action_pressed(use_item) and is_instance_valid(items[selected_item]):
+			if(items[selected_item].use(self)): 
+				items[selected_item].queue_free()
+				items[selected_item]=null
+			has_moved = true
 
 func _on_Beat_timeout():
 	var beats_dict = {0: ".", 1: "..", 2: "..."}

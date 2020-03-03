@@ -14,17 +14,24 @@ signal beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
-onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/Player1ExpContainer/ExperienceBar
-onready var Player1HpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/Player1HPContainer/HealthBar
+onready var Player1ExpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/HBoxContainer/VBoxContainer/Player1ExpContainer/ExperienceBar
+onready var Player1HpBar = $CanvasLayer/Interface/Player1_GUI/Player1Bars/HBoxContainer/VBoxContainer/Player1HPContainer/HealthBar
+onready var Player1Item1 = $CanvasLayer/Interface/Player1_GUI/Player1Bars/HBoxContainer/P1Item1
+onready var Player1Item2 = $CanvasLayer/Interface/Player1_GUI/Player1Bars/HBoxContainer/P1Item2
+onready var Player1Item3 = $CanvasLayer/Interface/Player1_GUI/Player1Bars/HBoxContainer/P1Item3
 onready var Player1GUI = $CanvasLayer/Interface/Player1_GUI
-onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/Player2ExpContainer/ExperienceBar
-onready var Player2HpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/Player2HPContainer/HealthBar
+onready var Player2ExpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/HBoxContainer/VBoxContainer/Player2ExpContainer/ExperienceBar
+onready var Player2HpBar = $CanvasLayer/Interface/Player2_GUI/Player2Bars/HBoxContainer/VBoxContainer/Player2HPContainer/HealthBar
+onready var Player2Item1 = $CanvasLayer/Interface/Player2_GUI/Player2Bars/HBoxContainer/P2Item1
+onready var Player2Item2 = $CanvasLayer/Interface/Player2_GUI/Player2Bars/HBoxContainer/P2Item2
+onready var Player2Item3 = $CanvasLayer/Interface/Player2_GUI/Player2Bars/HBoxContainer/P2Item3
 onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store
 var num_of_enemies_store
 var num_of_players_store
 var StateMap = Array()
+var ItemMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -33,7 +40,7 @@ func _ready():
 	Player2GUI.visible = false
 
 	randomize() #New random seed
-	$Beat.connect("timeout", self, "_on_Beat_timeout")
+	$Beat.connect("beat_timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
 	var players_to_spawn = 1
@@ -53,9 +60,6 @@ func _on_Beat_timeout():
 func spawnPlayer(x : int, y : int, is_first_player : bool):
 	if (StateMap[x][y] == null):
 		var player = PLAYER.instance()
-		set_tile(x,y,player)
-		get_node("YSort").add_child(player)
-		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		player.is_first_player = is_first_player
 		connect("beat", player, "_on_Beat_timeout")
 		player.connect("hit_floor_door", self, "next_level")
@@ -66,6 +70,7 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			Player1ExpBar.initialize(player.experience, player.experience_required)
 			player.connect("health_change", Player1HpBar, "on_player_health_change")
 			Player1HpBar.initialize(player.health, player.health_max)
+			player.item_guis = [Player1Item1,Player1Item2,Player1Item3]
 		else: 
 			Globals.player_two = player
 			Player2GUI.visible = true
@@ -75,7 +80,10 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			Player2ExpBar.initialize(player.experience, player.experience_required)
 			player.connect("health_change", Player2HpBar, "on_player_health_change")
 			Player2HpBar.initialize(player.health, player.health_max)
-		
+			player.item_guis = [Player2Item1,Player2Item2,Player2Item3]
+		set_tile(x,y,player)
+		get_node("YSort").add_child(player)
+		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		# init experience bars
 		
 
@@ -85,14 +93,13 @@ func spawnDamageable(x : int, y : int):
 		var obj = PLANT.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+
 
 func spawnEnemy(x : int, y : int, _resource):
 	if (StateMap[x][y] == null):
 		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		connect("beat", obj, "_on_Beat_timeout")
 
 func spawnExit(x : int, y : int):
@@ -100,15 +107,13 @@ func spawnExit(x : int, y : int):
 		var obj = FLOORDOOR.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
 func spawnItem(x : int, y : int, type):
-	if (StateMap[x][y] == null):
+	if (ItemMap[x][y] == null):
 		var obj = ITEM.instance()
-		obj.type = Globals.ItemType.key
-		set_tile(x,y,obj)
+		obj.type = type
+		set_tile(x,y,obj, true)
 		get_node("YSort").add_child(obj)
-		obj.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 
 func next_level():
 	get_node("Beat").set_up_music(5)
@@ -124,7 +129,10 @@ func clear_map() -> Array:
 					players.append(StateMap[x][y])
 				else:
 					StateMap[x][y].queue_free()
+			if is_instance_valid(ItemMap[x][y]):
+				ItemMap[x][y].queue_free()
 			StateMap[x][y] = null
+			ItemMap[x][y] = null
 	return players
 
 func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 , players: Array = []) -> void:
@@ -144,6 +152,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 				StateMap[pos.x].append(null)
 		if( GroundTileMap.get_cell(pos.x, pos.y) != 6 ):
 			StateMap[pos.x][pos.y] = PERMANENT.instance()
+	ItemMap = StateMap.duplicate(true)
 	for tile in GroundTileMap.get_used_cells():
 		#Check if tiles are a wall or near a wall
 		var is_pos_blocked = check_object_placement_blocked(tile)
@@ -207,34 +216,43 @@ func _get_tile_pos(_tile_cords : Vector2, _tile_map : TileMap) -> Vector2:
 	var cell_y_pos : float = float(_tile_cords.y*_tile_map.cell_size.y) + _tile_map.position.y + float(_tile_map.cell_size.y)/2.0
 	return Vector2(cell_x_pos, cell_y_pos)
 
-func check_object_placement_blocked(_location : Vector2) -> bool:
-	return StateMap[_location.x][_location.y] != null
+func check_object_placement_blocked(_location : Vector2, should_cover_items: bool = false) -> bool:
+	return (StateMap[_location.x][_location.y] != null) and (should_cover_items or ItemMap[_location.x][_location.y] != null)
 
 func get_object(x:int,y:int) -> Node:
 	if ( x < 0 or y < 0 ): return null
 	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return null
 	return StateMap[x][y]
+	
+func get_item(x:int,y:int) -> Node:
+	if ( x < 0 or y < 0 ): return null
+	if ( x + 1 > ItemMap.size() or y+1 > ItemMap[x].size()): return null
+	return ItemMap[x][y]
 
-func set_tile(x:int,y:int,val:Node,hide_tile:bool=false) -> bool:
+func set_tile(x:int,y:int,val:Node, is_item:bool=false,move_sprite:bool = true, hide_tile:bool=false) -> bool:
+	var Map
+	if is_item: Map = ItemMap
+	else: Map = StateMap
 	if ( x < 0 or y < 0 ): return false
-	if ( x + 1 > StateMap.size() or y+1 > StateMap[x].size()): return false
-	StateMap[x][y] = val
+	if ( x + 1 > Map.size() or y+1 > Map[x].size()): return false
+	Map[x][y] = val
 	if (is_instance_valid(val)):
 		val.tile_x = x
 		val.tile_y = y
-#		val.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
+		if move_sprite: val.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
 		if hide_tile: val.hide()
 		else: val.show()
 	return true
 
-func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int) -> bool:
+func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int, move_sprite = true) -> bool:
+	# Swaps two tiles in the state map. Does not touch the item map.
 	if ( from_x < 0 or from_y < 0 ): return false
 	if ( from_x + 1 > StateMap.size() or from_y+1 > StateMap[from_x].size()): return false
 	if ( to_x < 0 or to_y < 0 ): return false
 	if ( to_x + 1 > StateMap.size() or to_y+1 > StateMap[to_x].size()): return false
 	var from = get_object(from_x,from_y)
 	var to = get_object(to_x,to_y)
-	return set_tile(to_x,to_y,from) and set_tile(from_x,from_y,to)
+	return set_tile(to_x,to_y,from,false,move_sprite) and set_tile(from_x,from_y,to,false,move_sprite)
 
 func map_tile_to_global(x:int, y:int):
 	return _get_tile_pos(Vector2(x,y),GroundTileMap)

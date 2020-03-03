@@ -7,7 +7,8 @@ var current_level
 
 enum ItemType {
 	key,
-	chest
+	chest,
+	potion
 }
 
 

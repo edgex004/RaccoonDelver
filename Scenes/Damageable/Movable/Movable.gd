@@ -44,19 +44,21 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 	var desired_pos = get_node('/root/Level').map_tile_to_global(desired_tile_x,desired_tile_y)
 	var blocking_object = check_for_collision(dir_vector, movement_size)
 	if (!blocking_object):
+		#check for item
+		var item = get_node('/root/Level').get_item(desired_tile_x,desired_tile_y)
+		if item and is_instance_valid(item) and item.is_class("Item"):
+			pick_up_item(item)
 		#set_position(desired_pos)
 		move_tween.interpolate_property(self, "position", 
 		cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
 		move_tween.start()
-		get_node('/root/Level').swap_tile(tile_x, tile_y, desired_tile_x,desired_tile_y)
+		get_node('/root/Level').swap_tile(tile_x, tile_y, desired_tile_x,desired_tile_y, false)
 	else:
 		if blocking_object and is_instance_valid(blocking_object):
 			if 'is_alive' in blocking_object and blocking_object.is_alive and blocking_object.has_method('take_damage'):
 				blocking_object.take_damage(damage, self)
 			elif (blocking_object.is_class("FloorDoor")):
 				open_door(blocking_object)
-			elif (blocking_object.is_class("Item")):
-				pick_up_item(blocking_object)
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 	#Returns the blocking object
