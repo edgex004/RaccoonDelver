@@ -36,7 +36,7 @@ func _ready():
 	$Beat.connect("timeout", self, "_on_Beat_timeout")
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
-	var players_to_spawn = 2
+	var players_to_spawn = 1
 	if num_of_gamepads > 0:
 		print('found a gamepad')
 		players_to_spawn = 2
