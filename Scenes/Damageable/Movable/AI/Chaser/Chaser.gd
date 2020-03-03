@@ -30,6 +30,7 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
+	$MoveIndicator.hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

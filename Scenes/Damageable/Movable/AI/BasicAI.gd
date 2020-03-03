@@ -1,5 +1,9 @@
 extends "res://Scenes/Damageable/Movable/Movable.gd"
 
+const DIRECTIONS = {0: Vector2.LEFT, 
+			1: Vector2.UP,
+			2: Vector2.RIGHT,
+			3: Vector2.DOWN}
 
 # Leveling system variables
 var exp_on_kill_lin_coef = 1.5
@@ -19,6 +23,8 @@ var health_lin_coef = 1
 var health_pow_coef = 1
 var health_base = 1
 var health_scaler = 1
+
+var queued_move : Vector2 = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,3 +46,9 @@ func update_health_status():
 	$HealthBar.show()
 	$HealthBar.value = 100.0 * health/health_max
 	$Damage.play()
+	print("My damage: " + str(damage))
+
+func set_move_indicator(_direction : Vector2):
+	$MoveIndicator.rotation = _direction.angle()
+	$MoveIndicator.show()
+			
