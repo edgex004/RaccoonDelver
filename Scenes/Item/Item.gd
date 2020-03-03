@@ -21,7 +21,7 @@ func _ready():
 		Globals.ItemType.chest:
 			$Sprite.texture = preload("res://Scenes/Item/Chest.svg")
 		Globals.ItemType.potion:
-			$Sprite.texture = preload("res://Scenes/Item/potion.png")
+			$Sprite.texture = preload("res://Scenes/Item/Potion.png")
 	pass # Replace with function body.
 
 
