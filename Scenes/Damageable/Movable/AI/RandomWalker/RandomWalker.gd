@@ -25,10 +25,11 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
+	$MoveIndicator.hide()
 
 
 func _on_Beat_timeout():
-	#print("Beat Happened...")
+	move_tile(queued_move, 1)
 	if randf() < 0.6:
 		#Hunt the player
 		var is_p1_alive = false
@@ -63,11 +64,13 @@ func _on_Beat_timeout():
 				primary_dir = sign(dir_to_target.y) * Vector2.DOWN
 			var primary_dir_obj = check_for_collision(primary_dir, 1)
 			if !primary_dir_obj or primary_dir_obj is Player:
-				move_tile(primary_dir, 1)
+				queued_move = primary_dir
+				set_move_indicator(queued_move)
 				return
 			var secondary_dir_obj = check_for_collision(secondary_dir, 1)
 			if !secondary_dir_obj or secondary_dir_obj is Player:
-				move_tile(secondary_dir, 1)
+				queued_move = secondary_dir
+				set_move_indicator(queued_move)
 				return
 	var num_of_dirs = len(dirs)
 	var dir_index = randi() % num_of_dirs
@@ -79,5 +82,6 @@ func _on_Beat_timeout():
 		var collision_result = check_for_collision(dirs[dir_index], 1)
 		if !collision_result or collision_result is Player:
 			#Found an unblocked direction
-			move_tile(dirs[dir_index], 1)
+			queued_move = dirs[dir_index]
+			set_move_indicator(queued_move)
 			break

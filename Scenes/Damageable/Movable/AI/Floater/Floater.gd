@@ -1,11 +1,6 @@
 extends "res://Scenes/Damageable/Movable/AI/BasicAI.gd"
 
-const DIRECTIONS = {0: Vector2.LEFT, 
-			1: Vector2.UP,
-			2: Vector2.RIGHT,
-			3: Vector2.DOWN}
 
-var locked_dir : Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,10 +19,13 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
+	$MoveIndicator.hide()
 
 
 func _on_Beat_timeout():
-	if check_for_collision(locked_dir, 1):
+	#Move along the chosen direction
+	move_tile(queued_move, 1)
+	if check_for_collision(queued_move, 1):
 		if randf() < 0.5:
 			#Hunt the player
 			var is_p1_alive = false
@@ -63,12 +61,13 @@ func _on_Beat_timeout():
 				var primary_dir_obj = check_for_collision(primary_dir, 1)
 				if !primary_dir_obj or primary_dir_obj is Player:
 					move_tile(primary_dir, 1)
-					locked_dir = primary_dir
+					queued_move = primary_dir
+					set_move_indicator(primary_dir)
 					return
 				var secondary_dir_obj = check_for_collision(secondary_dir, 1)
 				if !secondary_dir_obj or secondary_dir_obj is Player:
-					move_tile(secondary_dir, 1)
-					locked_dir = secondary_dir
+					queued_move = secondary_dir
+					set_move_indicator(secondary_dir)
 					return
 		
 		#Chosen path is blocked, so find a new direction
@@ -83,7 +82,6 @@ func _on_Beat_timeout():
 			var collision_result = check_for_collision(DIRECTIONS[selected_dir], 1)
 			if !collision_result:
 				#Found an unblocked direction
-				locked_dir = DIRECTIONS[selected_dir]
+				queued_move = DIRECTIONS[selected_dir]
+				set_move_indicator(DIRECTIONS[selected_dir])
 				break
-	#Move along the chosen direction
-	move_tile(locked_dir, 1)
