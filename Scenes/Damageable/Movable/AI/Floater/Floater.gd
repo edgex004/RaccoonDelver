@@ -23,7 +23,9 @@ func _ready():
 
 
 func _on_Beat_timeout():
-	#Move along the chosen direction
+	# Don't take an action if we're already dead
+	if not is_alive:
+		return	#Move along the chosen direction
 	move_tile(queued_move, 1)
 	if check_for_collision(queued_move, 1):
 		if randf() < 0.5:

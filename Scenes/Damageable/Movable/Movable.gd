@@ -4,11 +4,12 @@ const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static object
 
 onready var move_tween = $MoveTween
 
-export (float) var move_time = 0.1 # seconds
-export (float) var damage = 40
-signal hit_floor_door
-var my_size
 
+export (float) var move_time = .1 # seconds
+export (float) var damage = 40
+
+var my_size
+var scale_direction
 
 # Leveling stats
 export var level = 1
@@ -20,6 +21,7 @@ export var level = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+#	$SizeTween.connect("tween_completed", self, "tween_completed")
 	pass
 
 
@@ -27,12 +29,19 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func pick_up_item(item: Node):
+	# If your player/monster can do this, override
+	pass
+	
+func open_door(door: Node):
+	# If your player/monster can do this, override
+	pass
 
 func move_tile(dir_vector : Vector2, movement_size : int = 1):
 	var cur_pos = get_position()
 	var desired_tile_x = tile_x + dir_vector.x * movement_size
 	var desired_tile_y = tile_y + dir_vector.y * movement_size
-	var desired_pos = get_node('/root/Level')._get_tile_pos(Vector2(desired_tile_x,desired_tile_y),get_node('/root/Level').GroundTileMap)
+	var desired_pos = get_node('/root/Level').map_tile_to_global(desired_tile_x,desired_tile_y)
 	var blocking_object = check_for_collision(dir_vector, movement_size)
 	if (!blocking_object):
 		#set_position(desired_pos)
@@ -44,8 +53,10 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 		if blocking_object and is_instance_valid(blocking_object):
 			if 'is_alive' in blocking_object and blocking_object.is_alive and blocking_object.has_method('take_damage'):
 				blocking_object.take_damage(damage, self)
-			elif (blocking_object.is_class("FloorDoor") and blocking_object.is_open):
-				emit_signal("hit_floor_door")
+			elif (blocking_object.is_class("FloorDoor")):
+				open_door(blocking_object)
+			elif (blocking_object.is_class("Item")):
+				pick_up_item(blocking_object)
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 	#Returns the blocking object

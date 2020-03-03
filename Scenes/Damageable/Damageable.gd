@@ -1,6 +1,8 @@
 extends Area2D
 class_name Damageable 
 
+const DAMAGE_LABEL = preload("res://Scenes/DisapearingLabel/DisapearingLabel.tscn")
+
 var tilesize = 32
 var tile_x
 var tile_y
@@ -18,7 +20,7 @@ const ENEMY_COL_MASK = 4 # 2^2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ProgressBar.hide()
+	$HealthBar.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,9 +33,14 @@ func take_damage(damage, source):
 	if not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
 		health -= damage
-		$ProgressBar.show()
-		$ProgressBar.value = 100.0 * health/health_max
+		$HealthBar.show()
+		$HealthBar.value = 100.0 * health/health_max
 		$Damage.play()
+		var label = DAMAGE_LABEL.instance()
+		label.set_size(Vector2(32,16))
+		label.add_text( "-" + str(damage))
+		add_child(label)
+		
 		print("damaged by: " + str(source.get_class()))
 		print("IAMA: " + str(self.get_class()))
 		print("My health = " + str(health))
@@ -45,3 +52,8 @@ func take_damage(damage, source):
 			
 			get_node('/root/Level').set_tile(tile_x,tile_y,null)
 			$Damage.connect("finished", self, "queue_free")
+
+func place_tile(x:int, y:int):
+	tile_x = x
+	tile_y = y
+	show()
