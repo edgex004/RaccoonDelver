@@ -17,7 +17,18 @@
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="Raccoon.svg">
   <defs
-     id="defs1181" />
+     id="defs1181">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect1213"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,9 +36,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="-62.849229"
-     inkscape:cy="13.911203"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="9.1690761"
+     inkscape:cy="20.173057"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -123,5 +134,14 @@
        r="0.47803575"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       d="m 97.997926,120.65476 c -0.0024,-0.021 -0.007,-0.0628 0.01377,-0.0874 0.02079,-0.0245 0.06686,-0.0319 0.127125,-0.0331 0.06027,-0.001 0.135496,0.004 0.190921,0.008 0.05542,0.004 0.09069,0.008 0.100764,0.035 0.01007,0.0269 -0.0058,0.0745 -0.02961,0.13099 -0.02377,0.0565 -0.0545,0.11949 -0.08216,0.17474 -0.02766,0.0552 -0.05172,0.10165 -0.08626,0.10342 -0.03454,0.002 -0.07828,-0.0414 -0.118668,-0.10085 -0.04039,-0.0594 -0.07699,-0.13459 -0.09526,-0.17212 -0.01828,-0.0375 -0.01826,-0.0377 -0.02062,-0.0587 z"
+       id="path1211"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect1213"
+       inkscape:original-d="m 98.000278,120.6758 c -0.0045,-0.0421 -0.0092,-0.0839 -0.01403,-0.1255 0.04614,-0.008 0.09228,-0.0149 0.13805,-0.0221 0.07478,0.005 0.149999,0.01 0.224608,0.0146 0.03624,0.004 0.07159,0.007 0.108332,0.0115 -0.01656,0.0499 -0.03246,0.0975 -0.0491,0.1469 -0.03095,0.0636 -0.06167,0.1266 -0.09283,0.19029 -0.02416,0.0468 -0.04823,0.0932 -0.0729,0.14063 -0.04429,-0.0441 -0.08802,-0.0873 -0.132329,-0.13067 -0.03645,-0.0754 -0.07305,-0.15056 -0.109812,-0.22553 z"
+       transform="matrix(1.5085137,0,0,1.5085137,-49.79793,-61.453812)"
+       sodipodi:nodetypes="ccccccccccc" />
   </g>
 </svg>
