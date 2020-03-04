@@ -75,7 +75,7 @@ func pick_up_item(item: Node) -> bool:
 				item.set_position(item_guis[i].get_rect().size/2)
 			get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null, true)
 			var label = DISAPEAR_LABEL.instance()
-			label.set_size(Vector2(64,16))
+			label.set_size(Vector2(96,16))
 			label.add_text(item.type_string() + "!")
 			add_child(label)
 			return true

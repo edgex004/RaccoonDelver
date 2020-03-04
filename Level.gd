@@ -270,5 +270,5 @@ func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int, move_sprite = true) -
 	var to = get_object(to_x,to_y)
 	return set_tile(to_x,to_y,from,false,move_sprite) and set_tile(from_x,from_y,to,false,move_sprite)
 
-func map_tile_to_global(x:int, y:int):
+func map_tile_to_global(x:int, y:int) -> Vector2:
 	return _get_tile_pos(Vector2(x,y),GroundTileMap)

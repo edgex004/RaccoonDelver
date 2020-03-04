@@ -8,7 +8,8 @@ var current_level
 enum ItemType {
 	key,
 	chest,
-	potion
+	potion,
+	fire
 }
 
 var verbose_movements = false
