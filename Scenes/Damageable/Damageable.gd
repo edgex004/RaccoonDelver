@@ -74,7 +74,7 @@ func take_damage(damage, source):
 						dropped_item.type = treasures[i]
 						get_node('/root/Level').set_tile(tile_x,tile_y,dropped_item,true)
 						get_node('/root/Level/YSort').add_child(dropped_item)
-						
+						break
 			queue_free()
 func place_tile(x:int, y:int):
 	tile_x = x
