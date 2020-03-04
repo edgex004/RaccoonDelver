@@ -8,5 +8,5 @@
 script = ExtResource( 2 )
 damage = 10.0
 
-[node name="Sprite" parent="." index="1"]
+[node name="Sprite" parent="." index="2"]
 texture = ExtResource( 3 )
