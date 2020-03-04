@@ -62,7 +62,7 @@ func _on_Beat_timeout():
 					primary_dir = sign(dir_to_target.y) * Vector2.DOWN
 				var primary_dir_obj = check_for_collision(primary_dir, 1)
 				if !primary_dir_obj or primary_dir_obj is Player:
-					move_tile(primary_dir, 1)
+#					move_tile(primary_dir, 1) #DVE commenting this out. It doesn't make sense to me and allows this monster to move twice in a turn
 					queued_move = primary_dir
 					set_move_indicator(primary_dir)
 					return

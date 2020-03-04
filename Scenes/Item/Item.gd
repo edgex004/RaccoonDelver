@@ -32,6 +32,7 @@ func use(user:Node) -> bool:
 			if (user.is_class("Player")):
 				user.health = user.health_max
 				user.update_health_status()
+				queue_free()
 			return true
 	return false
 

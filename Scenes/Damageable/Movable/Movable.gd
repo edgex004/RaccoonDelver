@@ -1,5 +1,8 @@
 extends Damageable
 
+func is_class(type): return type == "Movable" or .is_class(type)
+func    get_class(): return "Movable"
+
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
 onready var move_tween = $MoveTween
@@ -59,6 +62,11 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 				blocking_object.take_damage(damage, self)
 			elif (blocking_object.is_class("FloorDoor")):
 				open_door(blocking_object)
+	if Globals.verbose_movements:
+		var label = DAMAGE_LABEL.instance()
+		label.set_size(Vector2(48,16))
+		label.add_text( str(tile_x) + " " + str(tile_y))
+		add_child(label)
 
 func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 	#Returns the blocking object

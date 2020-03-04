@@ -62,8 +62,8 @@ func pick_up_item(item: Node) -> bool:
 		$Dialog.popup()
 		previous_items.push_back(item.type)
 	#Returns true if item was picked up. Base type does not pick up.
-	for i in range(items.size()-1):
-		if items[i] == null:
+	for i in range(0,items.size()):
+		if !is_instance_valid(items[i]):
 			items[i]=item
 			item.get_parent().remove_child(item)
 			if i > item_guis.size() - 1:
@@ -73,7 +73,7 @@ func pick_up_item(item: Node) -> bool:
 				item_guis[i].add_child(item)
 				item.show()
 				item.set_position(item_guis[i].get_rect().size/2)
-			get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null)
+			get_node('/root/Level').set_tile(item.tile_x,item.tile_y, null, true)
 			var label = DISAPEAR_LABEL.instance()
 			label.set_size(Vector2(64,16))
 			label.add_text(item.type_string() + "!")
@@ -113,9 +113,9 @@ func _process(delta):
 			if Input.is_action_pressed(dir):
 				move_tile(input_map[dir], 1)
 				has_moved = true
+				break
 		if Input.is_action_pressed(use_item) and is_instance_valid(items[selected_item]):
 			if(items[selected_item].use(self)): 
-				items[selected_item].queue_free()
 				items[selected_item]=null
 			has_moved = true
 

@@ -11,6 +11,8 @@ enum ItemType {
 	potion
 }
 
+var verbose_movements = false
+
 
 
 

@@ -121,6 +121,7 @@ func next_level():
 	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, old_players)
 
 func clear_map() -> Array:
+	# Clears the map but returns the array of players so they can move on to the next level
 	var players = []
 	for x in range(StateMap.size()):
 		for y in range(StateMap[x].size()):
@@ -236,6 +237,21 @@ func set_tile(x:int,y:int,val:Node, is_item:bool=false,move_sprite:bool = true, 
 	if ( x < 0 or y < 0 ): return false
 	if ( x + 1 > Map.size() or y+1 > Map[x].size()): return false
 	Map[x][y] = val
+	if Globals.verbose_movements:
+		var val_name = "nan"
+		if is_instance_valid(val): val_name = val.get_class()
+		var debug_map = ""
+		print("mapping "+val_name+" "+str(x)+" "+str(y))
+		for y_i in range(max(0,y-2),min(Map[0].size(),y+3),1):
+			for x_i in range(max(0,x-2),min(Map.size(),x+3),1):
+	#			print(str(x_i)+" "+str(y_i))
+				var obj
+				if is_item: obj = get_item(x_i,y_i)
+				else: obj = get_object(x_i,y_i)
+				if not is_instance_valid(obj): debug_map += "."
+				else: debug_map += obj.get_class()[0]
+			debug_map += "\n"
+		print (debug_map)
 	if (is_instance_valid(val)):
 		val.tile_x = x
 		val.tile_y = y
