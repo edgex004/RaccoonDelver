@@ -8,6 +8,7 @@ onready var move_tween = $MoveTween
 export (float) var move_time = .075 # seconds
 export (float) var damage = 40
 const JUMP_HEIGHT = 7 # in pixels
+const ATTACK_DIST = 9
 
 var my_size
 var scale_direction
@@ -58,6 +59,7 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 	else:
 		if blocking_object and is_instance_valid(blocking_object):
 			if 'is_alive' in blocking_object and blocking_object.is_alive and blocking_object.has_method('take_damage'):
+				chest_bump_blocker(dir_vector)
 				blocking_object.take_damage(damage, self)
 			elif (blocking_object.is_class("FloorDoor")):
 				open_door(blocking_object)
@@ -109,3 +111,21 @@ func run_movement_tween(cur_pos, desired_pos):
 		move_tween.interpolate_property(self, "position:y", 
 			y_temp, desired_pos.y, move_time/2, Tween.TRANS_LINEAR, Tween.EASE_IN)
 		move_tween.start()
+
+func chest_bump_blocker(dir_vector : Vector2):
+	var cur_pos = get_position()
+	move_tween.interpolate_property(self, "position:x", 
+			cur_pos.x, cur_pos.x + dir_vector.x * ATTACK_DIST, 
+			move_time/2, Tween.TRANS_CUBIC, Tween.EASE_OUT)
+	move_tween.interpolate_property(self, "position:y", 
+		cur_pos.y, cur_pos.y + dir_vector.y * ATTACK_DIST,
+		 move_time/2, Tween.TRANS_CUBIC, Tween.EASE_OUT)
+	move_tween.start()
+	yield(move_tween, "tween_completed")
+	move_tween.interpolate_property(self, "position:x", 
+			cur_pos.x + dir_vector.x * ATTACK_DIST, cur_pos.x, 
+			move_time/2, Tween.TRANS_CUBIC, Tween.EASE_OUT)
+	move_tween.interpolate_property(self, "position:y", 
+		cur_pos.y + dir_vector.y * ATTACK_DIST, cur_pos.y,
+		 move_time/2, Tween.TRANS_CUBIC, Tween.EASE_OUT)
+	move_tween.start()
