@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Dialog/ActionButton.svg" type="Texture" id=1]
+[ext_resource path="res://Scenes/Dialog/Dialog.gd" type="Script" id=2]
+
+[sub_resource type="Theme" id=1]
+
+[node name="Dialog" type="PopupDialog"]
+margin_left = 168.0
+margin_top = 102.0
+margin_right = 861.0
+margin_bottom = 492.0
+theme = SubResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 38.0
+margin_top = 38.0
+margin_right = 646.0
+margin_bottom = 347.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 608.0
+margin_bottom = 250.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
+margin_right = 200.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 200, 250 )
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/CenterContainer"]
+margin_left = 100.0
+margin_top = 125.0
+margin_right = 100.0
+margin_bottom = 125.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer"]
+margin_left = 204.0
+margin_right = 608.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 100, 100 )
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_active = false
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_top = 254.0
+margin_right = 608.0
+margin_bottom = 318.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/CenterContainer"]
+margin_left = 240.0
+margin_right = 368.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 1 )
+stretch_mode = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/CenterContainer/TextureButton"]
+margin_left = 39.1244
+margin_top = 25.396
+margin_right = 92.1244
+margin_bottom = 40.396
+text = "Action"
+__meta__ = {
+"_edit_use_anchors_": false
+}

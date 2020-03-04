@@ -15,13 +15,7 @@ var tile_y
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	match type:
-		Globals.ItemType.key:
-			$Sprite.texture = preload("res://Scenes/Item/Key.svg")
-		Globals.ItemType.chest:
-			$Sprite.texture = preload("res://Scenes/Item/Chest.svg")
-		Globals.ItemType.potion:
-			$Sprite.texture = preload("res://Scenes/Item/Potion.png")
+	$Sprite.texture = type_texture()
 	pass # Replace with function body.
 
 
@@ -47,3 +41,20 @@ func type_string() -> String:
 		Globals.ItemType.chest: return "Chest"
 		Globals.ItemType.potion: return "Potion"
 	return ""
+	
+func type_description() -> String:
+	match type:
+		Globals.ItemType.key: return "A Key! This is the key that can open the next door. Run into the door to use the key."
+		Globals.ItemType.chest: return "There could be anything in this chest. It could even be another chest. "
+		Globals.ItemType.potion: return "Potent pick-me-up potion promises perfect pulminatory points."
+	return ""
+
+func type_texture() -> Texture:
+	match type:
+		Globals.ItemType.key:
+			return preload("res://Scenes/Item/Key.svg")
+		Globals.ItemType.chest:
+			return preload("res://Scenes/Item/Chest.svg")
+		Globals.ItemType.potion:
+			return preload("res://Scenes/Item/Potion.png")
+	return null

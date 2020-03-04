@@ -30,6 +30,7 @@ var health_base = 100
 
 var max_items = 3
 var items = []
+var previous_items = []
 var item_guis
 var selected_item = 0
 
@@ -55,6 +56,11 @@ func _ready():
 	item_guis[0].set_selected(true)
 
 func pick_up_item(item: Node) -> bool:
+	if not item.type in previous_items:
+		$Dialog.set_texture( item.type_texture())
+		$Dialog.set_text(item.type_description())
+		$Dialog.popup()
+		previous_items.push_back(item.type)
 	#Returns true if item was picked up. Base type does not pick up.
 	for i in range(items.size()-1):
 		if items[i] == null:
