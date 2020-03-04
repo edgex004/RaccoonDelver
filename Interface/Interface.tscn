@@ -31,7 +31,7 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player1_GUI/Player1Bars"]
-margin_right = 299.0
+margin_right = 305.0
 margin_bottom = 56.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Player1_GUI/Player1Bars/HBoxContainer"]
@@ -55,17 +55,17 @@ margin_bottom = 56.0
 
 [node name="P1Item1" parent="Player1_GUI/Player1Bars/HBoxContainer" instance=ExtResource( 2 )]
 margin_left = 171.0
-margin_right = 203.0
+margin_right = 213.0
 margin_bottom = 56.0
 
 [node name="P1Item2" parent="Player1_GUI/Player1Bars/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 207.0
-margin_right = 239.0
+margin_left = 217.0
+margin_right = 259.0
 margin_bottom = 56.0
 
 [node name="P1Item3" parent="Player1_GUI/Player1Bars/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 243.0
-margin_right = 275.0
+margin_left = 263.0
+margin_right = 305.0
 margin_bottom = 56.0
 
 [node name="Player2_GUI" type="Control" parent="."]
@@ -91,26 +91,25 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player2_GUI/Player2Bars"]
-margin_right = 281.0
+margin_right = 305.0
 margin_bottom = 56.0
 
 [node name="P2Item1" parent="Player2_GUI/Player2Bars/HBoxContainer" instance=ExtResource( 2 )]
-margin_right = 32.0
 margin_bottom = 56.0
 
 [node name="P2Item2" parent="Player2_GUI/Player2Bars/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 36.0
-margin_right = 68.0
+margin_left = 46.0
+margin_right = 88.0
 margin_bottom = 56.0
 
 [node name="P2Item3" parent="Player2_GUI/Player2Bars/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 72.0
-margin_right = 104.0
+margin_left = 92.0
+margin_right = 134.0
 margin_bottom = 56.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Player2_GUI/Player2Bars/HBoxContainer"]
-margin_left = 108.0
-margin_right = 275.0
+margin_left = 138.0
+margin_right = 305.0
 margin_bottom = 56.0
 
 [node name="Label" type="Label" parent="Player2_GUI/Player2Bars/HBoxContainer/VBoxContainer"]

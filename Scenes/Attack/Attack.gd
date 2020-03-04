@@ -17,7 +17,7 @@ var turns_left = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("Fire at" + str(tile_x) +  " " + str(tile_y))
+	Globals.debug_attack("Fire at" + str(tile_x) +  " " + str(tile_y))
 	set_position(get_node('/root/Level').map_tile_to_global(tile_x,tile_y))
 	turns_left = int(randf() * max_burnout)
 	get_node('/root/Level/Beat').connect("beat_timeout", self, "cause_damage")
@@ -29,7 +29,7 @@ func _ready():
 #	pass
 
 func cause_damage():
-	print("Fire attacking")
+	Globals.debug_attack("Fire attacking")
 	if turns_left < 0: return queue_free()
 	var obj = get_node('/root/Level').get_object(tile_x,tile_y)
 	if is_instance_valid(obj) and obj.is_class("Damageable"):

@@ -10,7 +10,9 @@ const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
 const ITEM = preload('res://Scenes/Item/Item.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
-signal beat
+signal enviro_beat
+signal enemy_beat
+signal player_beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
@@ -35,12 +37,15 @@ var ItemMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print("setup")
 	Globals.current_level = self
 	# hide player 2 GUI until we need it
 	Player2GUI.visible = false
 
 	randomize() #New random seed
 	$Beat.connect("beat_timeout", self, "_on_Beat_timeout")
+	$Beat.connect("player_beat_timeout", self, "_on_player_Beat_timeout")
+
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
 	var players_to_spawn = 1
@@ -55,13 +60,24 @@ func _process(delta):
 	pass
 
 func _on_Beat_timeout():
-	emit_signal("beat")
+	emit_signal("enviro_beat")
+	emit_signal("enemy_beat")
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = $Beat.wait_time/4
+	timer.connect("timeout", self, "_on_player_Beat_timeout")
+	timer.start()
+	
+
+func _on_player_Beat_timeout():
+	print("player beat")
+	emit_signal("player_beat")
 
 func spawnPlayer(x : int, y : int, is_first_player : bool):
 	if (StateMap[x][y] == null):
 		var player = PLAYER.instance()
 		player.is_first_player = is_first_player
-		connect("beat", player, "_on_Beat_timeout")
+		connect("player_beat", player, "_on_Beat_timeout")
 		player.connect("hit_floor_door", self, "next_level")
 		if is_first_player:
 			Globals.player_one = player
@@ -100,7 +116,7 @@ func spawnEnemy(x : int, y : int, _resource):
 		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
-		connect("beat", obj, "_on_Beat_timeout")
+		connect("enemy_beat", obj, "_on_Beat_timeout")
 
 func spawnExit(x : int, y : int):
 	if (StateMap[x][y] == null):

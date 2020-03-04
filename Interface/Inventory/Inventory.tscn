@@ -5,8 +5,9 @@
 [ext_resource path="res://Interface/Inventory/Inventory.gd" type="Script" id=3]
 
 [node name="Inventory" type="CenterContainer"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 42.0
+margin_bottom = 42.0
+rect_min_size = Vector2( 42, 42 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -14,16 +15,18 @@ __meta__ = {
 
 [node name="Selection" type="TextureRect" parent="."]
 visible = false
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 41.0
+margin_bottom = 41.0
 texture = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Bachground" type="TextureRect" parent="."]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 36.0
-margin_bottom = 36.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 37.0
+margin_bottom = 37.0
 texture = ExtResource( 2 )
