@@ -5,8 +5,9 @@ const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static object
 onready var move_tween = $MoveTween
 
 
-export (float) var move_time = .1 # seconds
+export (float) var move_time = .075 # seconds
 export (float) var damage = 40
+const JUMP_HEIGHT = 7 # in pixels
 
 var my_size
 var scale_direction
@@ -49,9 +50,10 @@ func move_tile(dir_vector : Vector2, movement_size : int = 1):
 		if item and is_instance_valid(item) and item.is_class("Item"):
 			pick_up_item(item)
 		#set_position(desired_pos)
-		move_tween.interpolate_property(self, "position", 
-		cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
-		move_tween.start()
+		run_movement_tween(cur_pos, desired_pos)
+#			move_tween.interpolate_property(self, "position", 
+#			cur_pos, desired_pos, move_time, Tween.TRANS_SINE, Tween.EASE_IN)
+#			move_tween.start()
 		get_node('/root/Level').swap_tile(tile_x, tile_y, desired_tile_x,desired_tile_y, false)
 	else:
 		if blocking_object and is_instance_valid(blocking_object):
@@ -74,3 +76,36 @@ func check_for_collision(dir_vector : Vector2, movement_size : int = 1):
 
 func get_level():
 	return level
+
+
+func run_movement_tween(cur_pos, desired_pos):
+	if cur_pos.y == desired_pos.y:
+		#Moving in the x, jump on the y
+		var x_temp = (desired_pos.x - cur_pos.x) / 2 + cur_pos.x
+		var y_temp = cur_pos.y - JUMP_HEIGHT
+		move_tween.interpolate_property(self, "position:x", 
+			cur_pos.x, x_temp, move_time/2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		move_tween.interpolate_property(self, "position:y", 
+			cur_pos.y, y_temp, move_time/2, Tween.TRANS_SINE, Tween.EASE_OUT)
+		move_tween.start()
+		yield(move_tween, "tween_completed")
+		move_tween.interpolate_property(self, "position:x", 
+			x_temp, desired_pos.x, move_time/2, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		move_tween.interpolate_property(self, "position:y", 
+			y_temp, desired_pos.y, move_time/2, Tween.TRANS_BOUNCE, Tween.EASE_IN)
+		move_tween.start()
+	else:
+		# Moving in the y, jump on the x
+		var y_temp = (desired_pos.y - cur_pos.y) / 2 + cur_pos.y
+		var x_temp = cur_pos.x - JUMP_HEIGHT
+		move_tween.interpolate_property(self, "position:x", 
+			cur_pos.x, x_temp, move_time/2, Tween.TRANS_SINE, Tween.EASE_OUT)
+		move_tween.interpolate_property(self, "position:y", 
+			cur_pos.y, y_temp, move_time/2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		move_tween.start()
+		yield(move_tween, "tween_completed")
+		move_tween.interpolate_property(self, "position:x", 
+			x_temp, desired_pos.x, move_time/2, Tween.TRANS_BOUNCE, Tween.EASE_IN)
+		move_tween.interpolate_property(self, "position:y", 
+			y_temp, desired_pos.y, move_time/2, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		move_tween.start()
