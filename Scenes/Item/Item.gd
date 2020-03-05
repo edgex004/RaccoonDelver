@@ -1,6 +1,8 @@
 extends Node2D
 class_name Item
-
+const POTION3D = preload("res://Scenes/Item/JustPotion.tscn")
+const GREEKFIRE3D = preload("res://Scenes/Item/Greek_Fire.tscn")
+const KEY3D = preload("res://Scenes/Item/Key.tscn")
 const ATTACK = preload("res://Scenes/Attack/Attack.tscn")
 
 func is_class(type): return type == "Item" or .is_class(type)
@@ -17,7 +19,8 @@ var tile_y
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Sprite.texture = type_texture()
+#	$Sprite.texture = type_texture()
+	$ViewportContainer/Viewport/ItemDisplay.add_child(type_model())
 	pass # Replace with function body.
 
 
@@ -53,7 +56,7 @@ func type_string() -> String:
 		Globals.ItemType.key: return "Key"
 		Globals.ItemType.chest: return "Chest"
 		Globals.ItemType.potion: return "Potion"
-		Globals.ItemType.fire: return "Greek Fire"
+		Globals.ItemType.fire: return "Greek_Fire"
 	return ""
 	
 func type_description() -> String:
@@ -74,4 +77,16 @@ func type_texture() -> Texture:
 			return preload("res://Scenes/Item/Potion.png")
 		Globals.ItemType.fire:
 			return preload("res://Scenes/Item/GreekFire.png")
+	return null
+	
+func type_model() -> Node:
+	match type:
+		Globals.ItemType.key:
+			return KEY3D.instance()
+		Globals.ItemType.chest:
+			return POTION3D.instance()
+		Globals.ItemType.potion:
+			return POTION3D.instance()
+		Globals.ItemType.fire:
+			return GREEKFIRE3D.instance()
 	return null

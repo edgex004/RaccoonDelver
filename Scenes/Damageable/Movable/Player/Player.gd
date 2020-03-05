@@ -57,7 +57,7 @@ func _ready():
 
 func pick_up_item(item: Node) -> bool:
 	if not item.type in previous_items:
-		$Dialog.set_texture( item.type_texture())
+		$Dialog.set_model( item.type_string())
 		$Dialog.set_text(item.type_description())
 		$Dialog.popup()
 		previous_items.push_back(item.type)

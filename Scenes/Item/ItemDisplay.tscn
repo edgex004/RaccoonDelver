@@ -1,0 +1,18 @@
+[gd_scene format=2]
+
+[node name="ItemDisplay" type="Spatial"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.515135, 3.15267 )
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.61168, -1.06159, 5.11839 )
+light_energy = 2.0
+
+[node name="OmniLight2" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.863502, 2.07016, 5.11839 )
+light_energy = 4.0
+
+[node name="OmniLight3" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.863502, 4.40975, 2.02117 )
+light_energy = 2.0
