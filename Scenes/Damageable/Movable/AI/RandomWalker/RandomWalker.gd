@@ -27,6 +27,8 @@ func _ready():
 	set_level(1)
 	$MoveIndicator.hide()
 
+func _process(delta):
+	$Sprite.texture = $Viewport.get_texture()
 
 func _on_Beat_timeout():
 	# Don't take an action if we're already dead
@@ -70,12 +72,12 @@ func _on_Beat_timeout():
 			var primary_dir_obj = check_for_collision(primary_dir, 1)
 			if !primary_dir_obj or primary_dir_obj is Player:
 				queued_move = primary_dir
-				set_move_indicator(queued_move)
+				set_model_facing(queued_move)
 				return
 			var secondary_dir_obj = check_for_collision(secondary_dir, 1)
 			if !secondary_dir_obj or secondary_dir_obj is Player:
 				queued_move = secondary_dir
-				set_move_indicator(queued_move)
+				set_model_facing(queued_move)
 				return
 	var num_of_dirs = len(dirs)
 	var dir_index = randi() % num_of_dirs
@@ -88,5 +90,8 @@ func _on_Beat_timeout():
 		if !collision_result or collision_result is Player:
 			#Found an unblocked direction
 			queued_move = dirs[dir_index]
-			set_move_indicator(queued_move)
+			set_model_facing(queued_move)
 			break
+
+func set_model_facing(_direction : Vector2):
+	$Viewport/Walker.set_facing(_direction)
