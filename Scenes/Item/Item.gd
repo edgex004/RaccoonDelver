@@ -1,6 +1,8 @@
 extends Node2D
 class_name Item
 
+const ATTACK = preload("res://Scenes/Attack/Attack.tscn")
+
 func is_class(type): return type == "Item" or .is_class(type)
 func    get_class(): return "Item"
 
@@ -32,6 +34,17 @@ func use(user:Node) -> bool:
 			if (user.is_class("Player")):
 				user.health = user.health_max
 				user.update_health_status()
+				queue_free()
+			return true
+		Globals.ItemType.fire:
+			for x_i in range(user.tile_x-1,user.tile_x+2,1):
+				for y_i in range(user.tile_y-1,user.tile_y+2,1):
+					if x_i == user.tile_x and y_i == user.tile_y: continue
+					var attack = ATTACK.instance()
+					attack.tile_x = x_i
+					attack.tile_y = y_i
+					get_node('/root/Level').add_child(attack)
+					queue_free()
 			return true
 	return false
 
@@ -40,6 +53,7 @@ func type_string() -> String:
 		Globals.ItemType.key: return "Key"
 		Globals.ItemType.chest: return "Chest"
 		Globals.ItemType.potion: return "Potion"
+		Globals.ItemType.fire: return "Greek Fire"
 	return ""
 	
 func type_description() -> String:
@@ -47,6 +61,7 @@ func type_description() -> String:
 		Globals.ItemType.key: return "A Key! This is the key that can open the next door. Run into the door to use the key."
 		Globals.ItemType.chest: return "There could be anything in this chest. It could even be another chest. "
 		Globals.ItemType.potion: return "Potent pick-me-up potion promises perfect pulminatory points."
+		Globals.ItemType.fire: return "Greek Fire burns green and is hot to the touch."
 	return ""
 
 func type_texture() -> Texture:
@@ -57,4 +72,6 @@ func type_texture() -> Texture:
 			return preload("res://Scenes/Item/Chest.svg")
 		Globals.ItemType.potion:
 			return preload("res://Scenes/Item/Potion.png")
+		Globals.ItemType.fire:
+			return preload("res://Scenes/Item/GreekFire.png")
 	return null

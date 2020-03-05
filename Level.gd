@@ -10,7 +10,9 @@ const PLANT = preload('res://Scenes/Damageable/Plants/Plant.tscn')
 const ITEM = preload('res://Scenes/Item/Item.tscn')
 const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static objects)
 
-signal beat
+signal enviro_beat
+signal enemy_beat
+signal player_beat
 
 onready var ObjCollisionShape = preload('res://Objects/ObjectCollisonShape.res')
 onready var GroundTileMap : TileMap = $GroundTileMap
@@ -35,12 +37,15 @@ var ItemMap = Array()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print("setup")
 	Globals.current_level = self
 	# hide player 2 GUI until we need it
 	Player2GUI.visible = false
 
 	randomize() #New random seed
 	$Beat.connect("beat_timeout", self, "_on_Beat_timeout")
+	$Beat.connect("player_beat_timeout", self, "_on_player_Beat_timeout")
+
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
 	var players_to_spawn = 1
@@ -55,13 +60,24 @@ func _process(delta):
 	pass
 
 func _on_Beat_timeout():
-	emit_signal("beat")
+	emit_signal("enviro_beat")
+	emit_signal("enemy_beat")
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = $Beat.wait_time/4
+	timer.connect("timeout", self, "_on_player_Beat_timeout")
+	timer.start()
+	
+
+func _on_player_Beat_timeout():
+	print("player beat")
+	emit_signal("player_beat")
 
 func spawnPlayer(x : int, y : int, is_first_player : bool):
 	if (StateMap[x][y] == null):
 		var player = PLAYER.instance()
 		player.is_first_player = is_first_player
-		connect("beat", player, "_on_Beat_timeout")
+		connect("player_beat", player, "_on_Beat_timeout")
 		player.connect("hit_floor_door", self, "next_level")
 		if is_first_player:
 			Globals.player_one = player
@@ -100,7 +116,7 @@ func spawnEnemy(x : int, y : int, _resource):
 		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
-		connect("beat", obj, "_on_Beat_timeout")
+		connect("enemy_beat", obj, "_on_Beat_timeout")
 
 func spawnExit(x : int, y : int):
 	if (StateMap[x][y] == null):
@@ -121,6 +137,7 @@ func next_level():
 	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, old_players)
 
 func clear_map() -> Array:
+	# Clears the map but returns the array of players so they can move on to the next level
 	var players = []
 	for x in range(StateMap.size()):
 		for y in range(StateMap[x].size()):
@@ -236,6 +253,21 @@ func set_tile(x:int,y:int,val:Node, is_item:bool=false,move_sprite:bool = true, 
 	if ( x < 0 or y < 0 ): return false
 	if ( x + 1 > Map.size() or y+1 > Map[x].size()): return false
 	Map[x][y] = val
+	if Globals.verbose_movements:
+		var val_name = "nan"
+		if is_instance_valid(val): val_name = val.get_class()
+		var debug_map = ""
+		print("mapping "+val_name+" "+str(x)+" "+str(y))
+		for y_i in range(max(0,y-2),min(Map[0].size(),y+3),1):
+			for x_i in range(max(0,x-2),min(Map.size(),x+3),1):
+	#			print(str(x_i)+" "+str(y_i))
+				var obj
+				if is_item: obj = get_item(x_i,y_i)
+				else: obj = get_object(x_i,y_i)
+				if not is_instance_valid(obj): debug_map += "."
+				else: debug_map += obj.get_class()[0]
+			debug_map += "\n"
+		print (debug_map)
 	if (is_instance_valid(val)):
 		val.tile_x = x
 		val.tile_y = y
@@ -254,5 +286,5 @@ func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int, move_sprite = true) -
 	var to = get_object(to_x,to_y)
 	return set_tile(to_x,to_y,from,false,move_sprite) and set_tile(from_x,from_y,to,false,move_sprite)
 
-func map_tile_to_global(x:int, y:int):
+func map_tile_to_global(x:int, y:int) -> Vector2:
 	return _get_tile_pos(Vector2(x,y),GroundTileMap)

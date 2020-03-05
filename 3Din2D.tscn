@@ -17,4 +17,4 @@ handle_input_locally = false
 usage = 3
 render_target_update_mode = 3
 
-[node name="penguinbetter" type="Spatial" parent="Viewport" instance=ExtResource( 1 )]
+[node name="penguinbetter" parent="Viewport" instance=ExtResource( 1 )]

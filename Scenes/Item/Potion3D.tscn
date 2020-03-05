@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Blender/Potion.escn" type="PackedScene" id=1]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.0784314, 0, 0.552941, 1 )
+metallic = 0.32
+metallic_specular = 1.0
+metallic_texture_channel = 1
+roughness_texture_channel = 1
+rim_enabled = true
+rim = 0.01
+rim_tint = 0.1
+clearcoat_enabled = true
+clearcoat = 1.0
+clearcoat_gloss = 0.7
+
+[node name="Potion" instance=ExtResource( 1 )]
+
+[node name="Light" parent="." index="0"]
+transform = Transform( -0.290865, -0.771101, 0.566393, -0.0551891, 0.604525, 0.794672, -0.955171, 0.199884, -0.218392, 6.10215, 6.42974, -2.05072 )
+light_energy = 2.94
+light_specular = 0.05
+
+[node name="Camera" parent="." index="1"]
+transform = Transform( 0.658563, -0.0340871, 0.751753, -0.00240285, 0.998873, 0.0473973, -0.752521, -0.0330205, 0.657739, 8.37515, 0.98115, 7.18527 )
+
+[node name="Sphere" parent="." index="2"]
+material/0 = SubResource( 1 )

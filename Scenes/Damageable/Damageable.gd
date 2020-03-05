@@ -1,6 +1,9 @@
 extends Area2D
 class_name Damageable 
 
+func is_class(type): return type == "Damageable" or .is_class(type)
+func    get_class(): return "Damageable"
+
 const DAMAGE_LABEL = preload("res://Scenes/DisapearingLabel/DisapearingLabel.tscn")
 const ITEM = preload("res://Scenes/Item/Item.tscn")
 
@@ -31,9 +34,11 @@ func _ready():
 #	pass
 func take_damage(damage, source):
 	var my_col_mask = get_collision_mask()
-	var source_col_mask = source.get_collision_mask()
+	var source_col_mask
+	if not source.is_class("Attack"):
+		source_col_mask = source.get_collision_mask()
 
-	if not ((my_col_mask == source_col_mask) or (
+	if source.is_class("Attack") or not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
 		health -= damage
 		update_health_status()
@@ -55,9 +60,10 @@ func take_damage(damage, source):
 				source.gain_experience(experience_on_kill)
 			
 			get_node('/root/Level').set_tile(tile_x,tile_y,null)
-			$Damage.connect("finished", self, "queue_free")
 			
-			if (treasures.size() > 0):
+#			$Damage.connect("finished", self, "queue_free") # This doesn't work if the damage SFX are commented out 
+			
+			if (treasures.size() > 0) and not is_instance_valid(get_node('/root/Level').get_item(tile_x,tile_y)):
 				assert (treasures.size() == treasure_rates.size())
 				var num = randf()
 				var sum = 0
@@ -68,6 +74,8 @@ func take_damage(damage, source):
 						dropped_item.type = treasures[i]
 						get_node('/root/Level').set_tile(tile_x,tile_y,dropped_item,true)
 						get_node('/root/Level/YSort').add_child(dropped_item)
+						break
+			queue_free()
 func place_tile(x:int, y:int):
 	tile_x = x
 	tile_y = y
