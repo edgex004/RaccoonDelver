@@ -30,11 +30,9 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
-	$MoveIndicator.hide()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	$Sprite.texture = $Viewport.get_texture()
 
 func _on_Beat_timeout():
 	# Don't take an action if we're already dead
@@ -95,6 +93,7 @@ func _on_Beat_timeout():
 						selected_dir = sign(dir_to_target.y+rand_mover) * Vector2.DOWN
 			# make the  move
 			move_tile(selected_dir, 1)
+			set_model_facing(selected_dir)
 	beat_counter = (beat_counter + 1) % BEAT_CYCLE
 
 func _on_Area2D_area_entered(area):
@@ -110,3 +109,7 @@ func _on_Area2D_area_exited(area):
 		player1 = null
 	else:
 		player2 = null
+
+
+func set_model_facing(_direction : Vector2):
+	$Viewport/Chaser.set_facing(-_direction)

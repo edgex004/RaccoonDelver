@@ -25,7 +25,6 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
-	$MoveIndicator.hide()
 
 func _process(delta):
 	$Sprite.texture = $Viewport.get_texture()

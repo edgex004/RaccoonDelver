@@ -19,7 +19,6 @@ func _ready():
 	health_scaler = 1
 	
 	set_level(1)
-	$MoveIndicator.hide()
 
 
 func _on_Beat_timeout():
@@ -64,12 +63,12 @@ func _on_Beat_timeout():
 				if !primary_dir_obj or primary_dir_obj is Player:
 #					move_tile(primary_dir, 1) #DVE commenting this out. It doesn't make sense to me and allows this monster to move twice in a turn
 					queued_move = primary_dir
-					set_move_indicator(primary_dir)
+					set_model_facing(primary_dir)
 					return
 				var secondary_dir_obj = check_for_collision(secondary_dir, 1)
 				if !secondary_dir_obj or secondary_dir_obj is Player:
 					queued_move = secondary_dir
-					set_move_indicator(secondary_dir)
+					set_model_facing(secondary_dir)
 					return
 		
 		#Chosen path is blocked, so find a new direction
@@ -85,5 +84,8 @@ func _on_Beat_timeout():
 			if !collision_result:
 				#Found an unblocked direction
 				queued_move = DIRECTIONS[selected_dir]
-				set_move_indicator(DIRECTIONS[selected_dir])
+				set_model_facing(DIRECTIONS[selected_dir])
 				break
+
+func set_model_facing(_direction : Vector2):
+	pass

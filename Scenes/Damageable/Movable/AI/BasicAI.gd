@@ -52,7 +52,4 @@ func update_health_status():
 	$Damage.play()
 	print("My damage: " + str(damage))
 
-func set_move_indicator(_direction : Vector2):
-	$MoveIndicator.rotation = _direction.angle()
-	$MoveIndicator.show()
-			
+

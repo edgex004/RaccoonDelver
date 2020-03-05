@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Blender/Chaser.glb" type="PackedScene" id=1]
+[ext_resource path="res://Blender/EnemyMaterial.material" type="Material" id=2]
+[ext_resource path="res://Blender/EnemyEyesMaterial.material" type="Material" id=3]
+[ext_resource path="res://Blender/Chaser3D.gd" type="Script" id=4]
+
+[node name="Chaser" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="Body" parent="." index="2"]
+material/0 = ExtResource( 2 )
+
+[node name="LEye" parent="Body" index="0"]
+material/0 = ExtResource( 3 )
+
+[node name="REye1" parent="Body" index="1"]
+material/0 = ExtResource( 3 )
+
+[node name="REye2" parent="Body" index="2"]
+material/0 = ExtResource( 3 )
+
+[node name="Camera2" type="Camera" parent="." index="3"]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2.40365, 3.9985 )
+projection = 1
+size = 3.0
+
+[node name="OmniLight" type="DirectionalLight" parent="." index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.51225, -4.06818, 3.91259 )
+light_energy = 0.15
+light_indirect_energy = 0.0
+
+[node name="Light2" type="DirectionalLight" parent="." index="5"]
+transform = Transform( 0.0892059, -0.856088, 0.509073, -0.282295, 0.468421, 0.837192, -0.955171, -0.218391, -0.199883, 4.07624, 5.10508, -1.00545 )
+light_energy = 0.24
+
+[node name="TurnTween" type="Tween" parent="." index="6"]
