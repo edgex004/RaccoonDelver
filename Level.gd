@@ -66,8 +66,9 @@ func _on_Beat_timeout():
 	timer.one_shot = true
 	timer.wait_time = $Beat.wait_time/4
 	timer.connect("timeout", self, "_on_player_Beat_timeout")
+	add_child(timer)
 	timer.start()
-	
+
 
 func _on_player_Beat_timeout():
 	print("player beat")
