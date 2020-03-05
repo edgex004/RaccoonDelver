@@ -60,6 +60,8 @@ func Dialog_about_to_hide():
 	get_node("/root/Level/Beat").set_paused(false)
 	$VBoxContainer/HBoxContainer/RichTextLabel.set_text("")
 	$VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer.hide()
+	direction = PI/2
+	rot_radius = .1
 	if (!model_name): return
 	var obj = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + model_name )
 	if (is_instance_valid(obj)):

@@ -75,6 +75,7 @@ visible = false
 visible = false
 
 [node name="Key" parent="VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport" instance=ExtResource( 6 )]
+visible = false
 
 [node name="ItemDisplay" parent="VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport" instance=ExtResource( 3 )]
 
