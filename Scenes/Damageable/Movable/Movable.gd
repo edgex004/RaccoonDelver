@@ -7,6 +7,8 @@ const MOVEMENT_COLLISION_MASK = 1+2+4 #bit mask (2^0 + 2^1 + 2^2 = static object
 
 onready var move_tween = $MoveTween
 
+var damage_coefs = {'linear': 1, 'pow': 1, 'base': 1, 'scaler': 1}
+var health_coefs = {'linear': 1, 'pow': 1, 'base': 1, 'scaler': 1}
 
 export (float) var move_time = .075 # seconds
 export (float) var damage = 40
@@ -137,3 +139,10 @@ func chest_bump_blocker(dir_vector : Vector2):
 		cur_pos.y + dir_vector.y * ATTACK_DIST, cur_pos.y,
 		 move_time/2, Tween.TRANS_CUBIC, Tween.EASE_OUT)
 	move_tween.start()
+
+func calc_unit_stats():
+	damage = round((damage_coefs['linear'] * (level-1) + pow(level-1, damage_coefs['pow']) + 
+					damage_coefs['base']) * damage_coefs['scaler'])
+	health_max = round((health_coefs['linear'] * (level-1) + pow(level-1, health_coefs['pow']) + 
+					health_coefs['base']) * health_coefs['scaler'])
+	#print("Level: " + str(level) + ", Damage: " + str(damage) + ", Health: " + str(health_max))

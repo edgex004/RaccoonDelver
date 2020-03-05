@@ -84,14 +84,14 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -281.0
+margin_left = -310.0
 margin_top = -56.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player2_GUI/Player2Bars"]
-margin_right = 305.0
+margin_right = 310.0
 margin_bottom = 56.0
 
 [node name="P2Item1" parent="Player2_GUI/Player2Bars/HBoxContainer" instance=ExtResource( 2 )]
