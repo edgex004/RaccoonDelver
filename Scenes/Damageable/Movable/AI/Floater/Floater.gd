@@ -20,6 +20,8 @@ func _ready():
 	
 	set_level(1)
 
+func _process(delta):
+	$Sprite.texture = $Viewport.get_texture()
 
 func _on_Beat_timeout():
 	# Don't take an action if we're already dead
@@ -61,14 +63,13 @@ func _on_Beat_timeout():
 					primary_dir = sign(dir_to_target.y) * Vector2.DOWN
 				var primary_dir_obj = check_for_collision(primary_dir, 1)
 				if !primary_dir_obj or primary_dir_obj is Player:
-#					move_tile(primary_dir, 1) #DVE commenting this out. It doesn't make sense to me and allows this monster to move twice in a turn
 					queued_move = primary_dir
-					set_model_facing(primary_dir)
+					set_model_facing(queued_move)
 					return
 				var secondary_dir_obj = check_for_collision(secondary_dir, 1)
 				if !secondary_dir_obj or secondary_dir_obj is Player:
 					queued_move = secondary_dir
-					set_model_facing(secondary_dir)
+					set_model_facing(queued_move)
 					return
 		
 		#Chosen path is blocked, so find a new direction
@@ -84,8 +85,8 @@ func _on_Beat_timeout():
 			if !collision_result:
 				#Found an unblocked direction
 				queued_move = DIRECTIONS[selected_dir]
-				set_model_facing(DIRECTIONS[selected_dir])
+				set_model_facing(queued_move)
 				break
 
 func set_model_facing(_direction : Vector2):
-	pass
+	$Viewport/Floater.set_facing(_direction)
