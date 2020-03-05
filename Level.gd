@@ -34,6 +34,7 @@ var num_of_enemies_store
 var num_of_players_store
 var StateMap = Array()
 var ItemMap = Array()
+var current_level_value = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -53,7 +54,7 @@ func _ready():
 		print('found a gamepad')
 		players_to_spawn = 2
 	var enemies_to_spawn = 10
-	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn)
+	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn, current_level_value)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -112,12 +113,13 @@ func spawnDamageable(x : int, y : int):
 		get_node("YSort").add_child(obj)
 
 
-func spawnEnemy(x : int, y : int, _resource):
+func spawnEnemy(x : int, y : int, _resource, desired_level: int = 1):
 	if (StateMap[x][y] == null):
 		var obj = _resource.instance()
 		set_tile(x,y,obj)
 		get_node("YSort").add_child(obj)
 		connect("enemy_beat", obj, "_on_Beat_timeout")
+		obj.set_level(desired_level)
 
 func spawnExit(x : int, y : int):
 	if (StateMap[x][y] == null):
@@ -133,9 +135,10 @@ func spawnItem(x : int, y : int, type):
 		get_node("YSort").add_child(obj)
 
 func next_level():
+	current_level_value += 1
 	get_node("Beat").set_up_music(5)
 	var old_players = clear_map()
-	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, old_players)
+	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, current_level_value, old_players)
 
 func clear_map() -> Array:
 	# Clears the map but returns the array of players so they can move on to the next level
@@ -153,7 +156,7 @@ func clear_map() -> Array:
 			ItemMap[x][y] = null
 	return players
 
-func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 , players: Array = []) -> void:
+func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 , level: int = 1 , players: Array = []) -> void:
 	obj_to_place_store = obj_to_place
 	num_of_enemies_store = num_of_enemies
 	num_of_players_store = num_of_players
@@ -207,16 +210,24 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 			set_tile(selected_tile.x, selected_tile.y,players[i])
 		open_tiles.erase(selected_tile)
 	#Spawn enemies
+	var enemy_info = get_enemy_info(level)
+	#print("Enemy info: " + str(enemy_info))
 	for i in range(num_of_enemies):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var rand_chance = randf()
-		if rand_chance < 0.33:
-			spawnEnemy(selected_tile.x, selected_tile.y, RANDOM_WALKER)
-		elif rand_chance < 0.66:
-			spawnEnemy(selected_tile.x, selected_tile.y, FLOATER)
+		var level_span = enemy_info['Max Level'] - enemy_info['Min Level']
+		var enemy_level
+		if not level_span == 0:
+			enemy_level = (randi() % level_span) + enemy_info['Min Level']
 		else:
-			spawnEnemy(selected_tile.x, selected_tile.y, CHASER)
+			enemy_level = enemy_info['Min Level']
+		if rand_chance < enemy_info['Chaser']:
+			spawnEnemy(selected_tile.x, selected_tile.y, CHASER, enemy_level)
+		elif rand_chance < (enemy_info['Chaser'] + enemy_info['Floater']):
+			spawnEnemy(selected_tile.x, selected_tile.y, FLOATER, enemy_level)
+		else:
+			spawnEnemy(selected_tile.x, selected_tile.y, RANDOM_WALKER, enemy_level)
 		open_tiles.erase(selected_tile)
 	
 	var rand_index = randi() % open_tiles.size()
@@ -289,3 +300,23 @@ func swap_tile(from_x:int, from_y:int, to_x:int, to_y:int, move_sprite = true) -
 
 func map_tile_to_global(x:int, y:int) -> Vector2:
 	return _get_tile_pos(Vector2(x,y),GroundTileMap)
+
+
+func get_enemy_info(level):
+	var floater_chance = 0
+	if level <= 11: 
+		floater_chance = clamp(0.05*(level - 3), 0, 0.40)
+	else: 
+		floater_chance = clamp(0.65-3*(level - 3), 0.25, 0.40)
+	var chaser_chance = clamp(0.03*(level - 6), 0, 0.42)
+	var player_count = 0
+	var sum_player_levels = 0
+	if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_alive:
+		player_count += 1
+		sum_player_levels += Globals.player_one.level
+	if Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_alive:
+		player_count += 1
+		sum_player_levels += Globals.player_two.level
+	return {'Floater': floater_chance, 'Chaser': chaser_chance, 
+			'Min Level': max(1,sum_player_levels/player_count-1), 
+			'Max Level': max(sum_player_levels/player_count, level)}
