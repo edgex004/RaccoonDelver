@@ -39,10 +39,7 @@ func set_level(set_level): # note getter defined in Moveable
 	level = set_level
 	experience_on_kill = round((exp_on_kill_lin_coef * level + pow(level, exp_on_kill_pow_coef) + 
 							exp_on_kill_base) * exp_on_kill_scaler)
-	damage = round((damage_lin_coef * (level-1) + pow(level-1, damage_pow_coef) + 
-					damage_base) * damage_scaler)
-	health_max = round((health_lin_coef * (level-1) + pow(level-1, health_pow_coef) + 
-					health_base) * health_scaler)
+	calc_unit_stats()
 	health = health_max
 
 

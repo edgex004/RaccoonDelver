@@ -20,14 +20,6 @@ var exp_req_base = 50
 var experience_required = _get_experience_required(level + 1)
 var experience_total = 0
 
-# Damage variables
-var damage_lin_coef = 10
-var damage_base = 10
-
-# Health variables
-var health_lin_coef = 10
-var health_base = 100
-
 var max_items = 3
 var items = []
 var previous_items = []
@@ -50,7 +42,9 @@ var player2_inputs = {"player2_left": Vector2.LEFT,
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	update_player_stats()
+	damage_coefs = {'linear': 7.5, 'pow': 1.987, 'base': 10, 'scaler': 1}
+	health_coefs = {'linear': 10, 'pow': 1, 'base': 100, 'scaler': 1}
+	calc_unit_stats()
 	health = health_max
 	for i in range(max_items): items.push_back(null)
 	item_guis[0].set_selected(true)
@@ -146,14 +140,10 @@ func level_up():
 	#var stats = ['damage', 'health_max']
 	#var random_stat = stats[randi() % stats.size()]
 	#set(random_stat, get(random_stat) + 1)
-	update_player_stats()
+	calc_unit_stats()
 	#restore health to full on leveling
 	health = health_max
 	update_health_status()
-
-func update_player_stats():
-	health_max = health_base + health_lin_coef * (level-1)
-	damage = damage_base + damage_lin_coef * (level-1)
 
 func update_health_status():
 	emit_signal("health_change", [health, health_max])
