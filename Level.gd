@@ -212,13 +212,13 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	#Spawn enemies
 	var enemy_info = get_enemy_info(level)
 	#print("Enemy info: " + str(enemy_info))
-	for i in range(num_of_enemies):
+	for i in range(enemy_info['Enemy Count']):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var rand_chance = randf()
 		var level_span = enemy_info['Max Level'] - enemy_info['Min Level']
 		var enemy_level
-		if not level_span == 0:
+		if not level_span <= 0:
 			enemy_level = (randi() % level_span) + enemy_info['Min Level']
 		else:
 			enemy_level = enemy_info['Min Level']
@@ -305,10 +305,10 @@ func map_tile_to_global(x:int, y:int) -> Vector2:
 func get_enemy_info(level):
 	var floater_chance = 0
 	if level <= 11: 
-		floater_chance = clamp(0.05*(level - 3), 0, 0.40)
+		floater_chance = clamp(0.075*(level +1), 0, 0.40)
 	else: 
-		floater_chance = clamp(0.65-3*(level - 3), 0.25, 0.40)
-	var chaser_chance = clamp(0.03*(level - 6), 0, 0.42)
+		floater_chance = clamp(0.65-0.03*(level + 1), 0.25, 0.40)
+	var chaser_chance = clamp(0.075*(level - 1), 0, 0.40)
 	var player_count = 0
 	var sum_player_levels = 0
 	if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_alive:
@@ -317,6 +317,9 @@ func get_enemy_info(level):
 	if Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_alive:
 		player_count += 1
 		sum_player_levels += Globals.player_two.level
+	var min_enemy_count = int(min(15, 8+(level-1) * 1))
+	var max_enemy_count = int(min(20, 10+(level-1) * 1))
 	return {'Floater': floater_chance, 'Chaser': chaser_chance, 
-			'Min Level': max(1,sum_player_levels/player_count-1), 
-			'Max Level': max(sum_player_levels/player_count, level)}
+			'Min Level': max(1,int(sum_player_levels/player_count)), 
+			'Max Level': max(int(sum_player_levels/player_count+1), level), 
+			'Enemy Count': randi() % (max_enemy_count - min_enemy_count) + min_enemy_count}

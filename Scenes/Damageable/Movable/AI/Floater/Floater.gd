@@ -6,8 +6,8 @@ extends "res://Scenes/Damageable/Movable/AI/BasicAI.gd"
 func _ready():
 	exp_on_kill_scaler = 0.75
 	
-	damage_coefs = {'linear': 3, 'pow': 1.25, 'base': 30, 'scaler': 1}
-	health_coefs = {'linear': 7.5, 'pow': 2.2, 'base': 5, 'scaler': 1}
+	damage_coefs = {'linear': 4, 'pow': 1.4, 'base': 30, 'scaler': 1}
+	health_coefs = {'linear': 10, 'pow': 2.35, 'base': 5, 'scaler': 1}
 	
 	set_level(1)
 
