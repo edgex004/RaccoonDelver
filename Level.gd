@@ -144,6 +144,7 @@ func next_level():
 	get_node("Beat").set_up_music(5)
 	var old_players = clear_map()
 	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, current_level_value, old_players)
+	print("You're on level " + str(current_level_value))
 
 func clear_map() -> Array:
 	# Clears the map but returns the array of players so they can move on to the next level
@@ -218,10 +219,11 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	var enemy_info = get_enemy_info(level)
 	#print("Enemy info: " + str(enemy_info))
 	for i in range(enemy_info['Enemy Count']):
+	#for i in range(25):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
 		var enemy_level
-		if randf() < 0.85:
+		if randf() < enemy_info['Level Fraction']:
 			enemy_level = enemy_info['Target Enemy Level']
 		else:
 			enemy_level = enemy_info['Target Enemy Level']+1
@@ -315,14 +317,20 @@ func get_enemy_info(level):
 	var chaser_chance = clamp(0.075*(level - 1), 0, 0.40)
 	var player_count = 0
 	var sum_player_levels = 0
+	var experience_fraction = 0
 	if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_alive:
 		player_count += 1
 		sum_player_levels += Globals.player_one.level
+		experience_fraction += Globals.player_one.experience/Globals.player_one.experience_required
 	if Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_alive:
 		player_count += 1
 		sum_player_levels += Globals.player_two.level
+		experience_fraction += Globals.player_two.experience/Globals.player_two.experience_required
 	var min_enemy_count = int(min(20, 10+(level-1) * 1))
 	var max_enemy_count = int(min(25, 12+(level-1) * 1))
+	if player_count == 0: #prevent divide by zero
+		player_count += 1
 	return {'Floater': floater_chance, 'Chaser': chaser_chance, 
 			'Target Enemy Level': int(sum_player_levels/player_count), 
+			'Level Fraction': 0.975-(experience_fraction/player_count)/2,
 			'Enemy Count': randi() % (max_enemy_count - min_enemy_count) + min_enemy_count}
