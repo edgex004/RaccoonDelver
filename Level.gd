@@ -34,7 +34,9 @@ var num_of_enemies_store
 var num_of_players_store
 var StateMap = Array()
 var ItemMap = Array()
+
 var current_level_value = 1
+const DEBUG_MODE = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -102,7 +104,10 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 		set_tile(x,y,player)
 		get_node("YSort").add_child(player)
 		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )
-		# init experience bars
+		
+		if DEBUG_MODE:
+			for i in range(current_level_value-1):
+				player.level_up()
 		
 
 
@@ -219,7 +224,7 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 		var level_span = enemy_info['Max Level'] - enemy_info['Min Level']
 		var enemy_level
 		if not level_span <= 0:
-			enemy_level = (randi() % level_span) + enemy_info['Min Level']
+			enemy_level = (randi() % (level_span+1)) + enemy_info['Min Level']
 		else:
 			enemy_level = enemy_info['Min Level']
 		if rand_chance < enemy_info['Chaser']:
