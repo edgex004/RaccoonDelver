@@ -106,6 +106,7 @@ func _process(delta):
 		for dir in input_map.keys():
 			if Input.is_action_pressed(dir):
 				move_tile(input_map[dir], 1)
+				set_model_facing(input_map[dir])
 				has_moved = true
 				break
 		if Input.is_action_pressed(use_item) and is_instance_valid(items[selected_item]):
@@ -147,3 +148,6 @@ func level_up():
 
 func update_health_status():
 	emit_signal("health_change", [health, health_max])
+
+func set_model_facing(_direction : Vector2):
+	$ViewportContainer/Viewport/Spatial.set_facing(-_direction)
