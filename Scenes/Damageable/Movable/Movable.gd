@@ -145,4 +145,4 @@ func calc_unit_stats():
 					damage_coefs['base']) * damage_coefs['scaler'])
 	health_max = round((health_coefs['linear'] * (level-1) + pow(level-1, health_coefs['pow']) + 
 					health_coefs['base']) * health_coefs['scaler'])
-	#print("Level: " + str(level) + ", Damage: " + str(damage) + ", Health: " + str(health_max))
+	#print("My class: " + self.get_class() + ", Level: " + str(level) + ", Damage: " + str(damage) + ", Health: " + str(health_max))
