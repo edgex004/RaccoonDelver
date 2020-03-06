@@ -1,23 +1,19 @@
 extends Damageable
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
 
-# Called when the node enters the scene tree for the first time.
+
+
+
+
 func _ready():
-	var rand_sprite = randi() % 3
-	match rand_sprite:
-		0:
-			get_node('Sprite').texture = preload('res://Objects/Object2.png')
-		1:
-			get_node('Sprite').texture = preload('res://Objects/Object3.png')
-		2:
-			get_node('Sprite').texture = preload('res://Objects/Object4.png')
+	var rand_sprite = randi() % 37
+	var sprite_resource = "res://Scenes/Damageable/Plants/CreepyPlant%04d.png" % rand_sprite
+	get_node('Sprite').texture = load(sprite_resource)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+
+
+

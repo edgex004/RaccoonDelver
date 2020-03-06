@@ -11,10 +11,11 @@ damage = 10.0
 
 [node name="Sprite" parent="." index="1"]
 position = Vector2( 0, -7 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 3 )
 
 [node name="Viewport" type="Viewport" parent="." index="5"]
-size = Vector2( 32, 32 )
+size = Vector2( 128, 128 )
 own_world = true
 transparent_bg = true
 hdr = false
