@@ -12,7 +12,7 @@ func _ready():
 	damage = 10
 	exp_on_kill_scaler = 0.65
 	
-	damage_coefs = {'linear': 2, 'pow': 1.15, 'base': 15, 'scaler': 1}
+	damage_coefs = {'linear': 2, 'pow': 1.15, 'base': 10, 'scaler': 1}
 	health_coefs = {'linear': 9, 'pow': 0, 'base': 19, 'scaler': 1}
 	
 	set_level(1)

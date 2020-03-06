@@ -9,7 +9,7 @@ _data = [ Vector2( 0.405858, 0.302612 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0
 [sub_resource type="CurveTexture" id=2]
 curve = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="ParticlesMaterial" id=3]
 lifetime_randomness = 0.55
 trail_divisor = 2
 trail_size_modifier = SubResource( 2 )
@@ -29,7 +29,7 @@ color = Color( 0.494118, 0.501961, 0.494118, 1 )
 hue_variation = 0.05
 hue_variation_random = 0.17
 
-[sub_resource type="ParticlesMaterial" id=3]
+[sub_resource type="ParticlesMaterial" id=4]
 lifetime_randomness = 0.55
 trail_divisor = 2
 trail_size_modifier = SubResource( 2 )
@@ -67,11 +67,11 @@ __meta__ = {
 amount = 25
 explosiveness = 0.17
 randomness = 0.23
-process_material = SubResource( 4 )
+process_material = SubResource( 3 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 amount = 25
 lifetime = 0.2
 explosiveness = 0.17
 randomness = 0.23
-process_material = SubResource( 3 )
+process_material = SubResource( 4 )

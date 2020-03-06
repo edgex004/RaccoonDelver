@@ -36,7 +36,7 @@ var StateMap = Array()
 var ItemMap = Array()
 
 var current_level_value = 1
-const DEBUG_MODE = false
+const DEBUG_MODE = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -220,13 +220,12 @@ func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_p
 	for i in range(enemy_info['Enemy Count']):
 		var rand_index = randi() % open_tiles.size()
 		var selected_tile = open_tiles[rand_index]
-		var rand_chance = randf()
-		var level_span = enemy_info['Max Level'] - enemy_info['Min Level']
 		var enemy_level
-		if not level_span <= 0:
-			enemy_level = (randi() % (level_span+1)) + enemy_info['Min Level']
+		if randf() < 0.85:
+			enemy_level = enemy_info['Target Enemy Level']
 		else:
-			enemy_level = enemy_info['Min Level']
+			enemy_level = enemy_info['Target Enemy Level']+1
+		var rand_chance = randf()
 		if rand_chance < enemy_info['Chaser']:
 			spawnEnemy(selected_tile.x, selected_tile.y, CHASER, enemy_level)
 		elif rand_chance < (enemy_info['Chaser'] + enemy_info['Floater']):
@@ -322,9 +321,8 @@ func get_enemy_info(level):
 	if Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_alive:
 		player_count += 1
 		sum_player_levels += Globals.player_two.level
-	var min_enemy_count = int(min(15, 8+(level-1) * 1))
-	var max_enemy_count = int(min(20, 10+(level-1) * 1))
+	var min_enemy_count = int(min(20, 10+(level-1) * 1))
+	var max_enemy_count = int(min(25, 12+(level-1) * 1))
 	return {'Floater': floater_chance, 'Chaser': chaser_chance, 
-			'Min Level': max(1,int(sum_player_levels/player_count)), 
-			'Max Level': max(int(sum_player_levels/player_count+1), level), 
+			'Target Enemy Level': int(sum_player_levels/player_count), 
 			'Enemy Count': randi() % (max_enemy_count - min_enemy_count) + min_enemy_count}
