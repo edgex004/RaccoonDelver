@@ -17,8 +17,8 @@ var dirs = {0: Vector2.LEFT,
 func _ready():
 	exp_on_kill_scaler = 0.85
 	
-	damage_coefs = {'linear': 2, 'pow': 1.25, 'base': 15, 'scaler': 1}
-	health_coefs = {'linear': 12.5, 'pow': 2.3, 'base': 5, 'scaler': 1}
+	damage_coefs = {'linear': 4, 'pow': 1.25, 'base': 15, 'scaler': 1}
+	health_coefs = {'linear': 12.5, 'pow': 2.35, 'base': 10, 'scaler': 1}
 	
 	set_level(1)
 
