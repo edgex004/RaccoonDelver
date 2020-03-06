@@ -32,9 +32,9 @@ func _on_Beat_timeout():
 		var is_p1_alive = false
 		var is_p2_alive = false
 		#Check if either player exists
-		if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_alive:
+		if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_class("Player") and Globals.player_one.is_alive:
 			is_p1_alive = true
-		elif Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_alive:
+		elif Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_class("Player") and Globals.player_two.is_alive:
 			is_p2_alive = true
 		#Select the closest target
 		var target_player : Player
