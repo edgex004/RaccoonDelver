@@ -46,6 +46,7 @@ func _ready():
 	health_coefs = {'linear': 10, 'pow': 1, 'base': 100, 'scaler': 1}
 	calc_unit_stats()
 	health = health_max
+	update_health_status()
 	for i in range(max_items): items.push_back(null)
 	item_guis[0].set_selected(true)
 

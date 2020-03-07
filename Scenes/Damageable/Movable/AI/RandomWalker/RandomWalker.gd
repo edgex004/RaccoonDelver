@@ -21,6 +21,7 @@ func _process(delta):
 	$Sprite.texture = $Viewport.get_texture()
 
 func _on_Beat_timeout():
+	was_hit = false
 	# Don't take an action if we're already dead
 	if not is_alive:
 		return

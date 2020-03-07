@@ -24,6 +24,8 @@ const ENEMY_COL_MASK = 4 # 2^2
 var treasures = []
 var treasure_rates = []
 
+var was_hit : bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$HealthBar.hide()
@@ -32,7 +34,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-func take_damage(damage, source):
+func take_damage(base_damage, source):
 	var my_col_mask = get_collision_mask()
 	var source_col_mask
 	if not source.is_class("Attack"):
@@ -40,14 +42,24 @@ func take_damage(damage, source):
 
 	if source.is_class("Attack") or not ((my_col_mask == source_col_mask) or (
 		(my_col_mask == BACKGROUND_COL_MASK) and (source_col_mask == ENEMY_COL_MASK))):
+		
+		var damage = base_damage
+		var critical_hit : bool = false
+		if my_col_mask == ENEMY_COL_MASK:
+			if was_hit:
+				damage = base_damage * 2
+				critical_hit = true
+			else:
+				was_hit = true
+			#print("My col mask: " + str(my_col_mask) + ". Base damage: " + str(base_damage) + ". Final damage: " + str(damage))
+		
 		health -= damage
 		update_health_status()
-#		$HealthBar.show()
-#		$HealthBar.value = 100.0 * health/health_max
-#		$Damage.play()
 		var label = DAMAGE_LABEL.instance()
 		label.set_size(Vector2(32,16))
 		label.add_text( "-" + str(damage))
+		if critical_hit:
+			label.set("custom_colors/default_color", Color( 0.75, 0, 0, 1))
 		add_child(label)
 		
 		print("damaged by: " + str(source.get_class()))
