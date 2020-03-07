@@ -13,7 +13,7 @@ var z_direction = rot_radius
 var page = 0
 
 var page_text = ["Version 1.0.0\n\nDeveloped for the 7DRL Challenge 2020.\n\nCode and assets by Quinn Morrison, David Von Edge, and Harrison Coons.",
-				"Music: https://www.purple-planet.com\n\nMade with Godot version 3.2"]
+				"Music:https://www.purple-planet.com\nSFX:https://freesound.org/people/insanity54/sounds/455396\nSFX:https://freesound.org/people/ihitokage/sounds/395362\n\nMade with Godot version 3.2"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
