@@ -3,6 +3,8 @@ extends Node
 var player_one : Player
 var player_two : Player
 
+var num_players = 1
+
 var current_level
 
 enum ItemType {

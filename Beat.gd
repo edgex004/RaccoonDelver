@@ -2,6 +2,7 @@ extends Timer
 
 var BPM = 100.0
 var MUSIC_BPM = 120.0
+var MAX_BPM = 240.0
 var END_SONG_TOL_SEC = 2
 var should_swallow_beats = false
 
@@ -14,6 +15,7 @@ signal player_beat_timeout
 # var b = "text"
 func set_up_music(bpm_adjustment: float = 0):
 	BPM+=bpm_adjustment
+	BPM=min(BPM,MAX_BPM)
 	$Music.set_pitch_scale(BPM/MUSIC_BPM)
 	$Music.play()
 	connect("timeout", self,"on_beat_timeout")
@@ -26,7 +28,7 @@ func _ready():
 	player_timer.one_shot = true
 	player_timer.connect("timeout", self, "_on_player_Beat_timeout")
 	add_child(player_timer)
-	set_up_music()
+
 	
 
 func set_paused(is_paused: bool):

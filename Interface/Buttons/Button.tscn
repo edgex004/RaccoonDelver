@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Fonts/Default.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Interface/Buttons/HoverStyle.tres" type="StyleBox" id=2]
+[ext_resource path="res://Interface/Buttons/NormalStyle.tres" type="StyleBox" id=3]
+
+[node name="Button" type="Button"]
+margin_left = 87.0
+margin_top = 44.0
+margin_right = 247.0
+margin_bottom = 108.0
+rect_min_size = Vector2( 160, 64 )
+custom_styles/hover = ExtResource( 2 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 3 )
+custom_fonts/font = ExtResource( 1 )
+text = "Restart"
+__meta__ = {
+"_edit_use_anchors_": false
+}

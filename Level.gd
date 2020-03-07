@@ -31,7 +31,6 @@ onready var Player2GUI = $CanvasLayer/Interface/Player2_GUI
 
 var obj_to_place_store
 var num_of_enemies_store
-var num_of_players_store
 var StateMap = Array()
 var ItemMap = Array()
 
@@ -46,35 +45,44 @@ func _ready():
 	Player2GUI.visible = false
 
 	randomize() #New random seed
-	$Beat.connect("beat_timeout", self, "_on_Beat_timeout")
-	$Beat.connect("player_beat_timeout", self, "_on_player_Beat_timeout")
+
 
 	var objects_to_spawn = 30
 	var num_of_gamepads = Input.get_connected_joypads().size()
-	var players_to_spawn = 1
-	if num_of_gamepads > 0:
-		print('found a gamepad')
-		players_to_spawn = 2
+	var players_to_spawn = Globals.num_players
 	var enemies_to_spawn = 10
 	spawn_random_objects(objects_to_spawn, enemies_to_spawn, players_to_spawn, current_level_value)
+	$Beat.connect("beat_timeout", self, "_on_Beat_timeout")
+	$Beat.connect("player_beat_timeout", self, "_on_player_Beat_timeout")
+	$Beat.set_up_music()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
 func _on_Beat_timeout():
-	emit_signal("enviro_beat")
-	emit_signal("enemy_beat")
-	var timer = Timer.new()
-	timer.one_shot = true
-	timer.wait_time = $Beat.wait_time/4
-	timer.connect("timeout", self, "_on_player_Beat_timeout")
-	add_child(timer)
-	timer.start()
+	var is_p1_alive = false
+	var is_p2_alive = false
+	if Globals.player_one and is_instance_valid(Globals.player_one) and Globals.player_one.is_class("Player") and Globals.player_one.is_alive:
+		is_p1_alive = true
+	elif Globals.player_two and is_instance_valid(Globals.player_two) and Globals.player_two.is_class("Player") and Globals.player_two.is_alive:
+		is_p2_alive = true
+	if is_p1_alive or is_p2_alive:
+		emit_signal("enviro_beat")
+		emit_signal("enemy_beat")
+		var timer = Timer.new()
+		timer.one_shot = true
+		timer.wait_time = $Beat.wait_time/4
+		timer.connect("timeout", self, "_on_player_Beat_timeout")
+		add_child(timer)
+		timer.start()
+	else:
+		$Beat.set_paused(true)
+		$RestartDialog.popup()
 
 
 func _on_player_Beat_timeout():
-	print("player beat")
+#	print("player beat")
 	emit_signal("player_beat")
 
 func spawnPlayer(x : int, y : int, is_first_player : bool):
@@ -139,20 +147,28 @@ func spawnItem(x : int, y : int, type):
 		set_tile(x,y,obj, true)
 		get_node("YSort").add_child(obj)
 
+func restart():
+	current_level_value = 1
+	get_node("Beat").BPM = 100
+	get_node("Beat").set_up_music(0)
+	clear_map(true)
+	spawn_random_objects(obj_to_place_store, num_of_enemies_store, Globals.num_players, current_level_value)
+	print("You're on level " + str(current_level_value))
+	
 func next_level():
 	current_level_value += 1
 	get_node("Beat").set_up_music(5)
 	var old_players = clear_map()
-	spawn_random_objects(obj_to_place_store, num_of_enemies_store, num_of_players_store, current_level_value, old_players)
+	spawn_random_objects(obj_to_place_store, num_of_enemies_store, Globals.num_players, current_level_value, old_players)
 	print("You're on level " + str(current_level_value))
 
-func clear_map() -> Array:
+func clear_map( delete_players:bool = false) -> Array:
 	# Clears the map but returns the array of players so they can move on to the next level
 	var players = []
 	for x in range(StateMap.size()):
 		for y in range(StateMap[x].size()):
 			if is_instance_valid(StateMap[x][y]):
-				if StateMap[x][y].is_class("Player"):
+				if StateMap[x][y].is_class("Player") && !delete_players:
 					players.append(StateMap[x][y])
 				else:
 					StateMap[x][y].queue_free()
@@ -165,7 +181,6 @@ func clear_map() -> Array:
 func spawn_random_objects(obj_to_place : int, num_of_enemies : int = 0, num_of_players : int = 1 , level: int = 1 , players: Array = []) -> void:
 	obj_to_place_store = obj_to_place
 	num_of_enemies_store = num_of_enemies
-	num_of_players_store = num_of_players
 	if !GroundTileMap.tile_set:
 		return
 	#Get all tiles

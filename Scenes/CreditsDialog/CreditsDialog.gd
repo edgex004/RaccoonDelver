@@ -10,19 +10,25 @@ var rot_radius = .1
 var x_direction = -rot_radius
 var z_direction = rot_radius
 
+var page = 0
+
+var page_text = ["Version 1.0.0\n\nDeveloped for the 7DRL Challenge 2020.\n\nCode and assets by Quinn Morrison, David Von Edge, and Harrison Coons.",
+				"Music: https://www.purple-planet.com\n\nMade with Godot version 3.2"]
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	connect("about_to_show", self, "Dialog_about_to_show")
 	connect("popup_hide", self, "Dialog_about_to_hide")
-	$VBoxContainer/CenterContainer/Continue.connect("pressed", self, "continue")
+	$VBoxContainer/CenterContainer/Button.connect("pressed", self,"next")
 	$Tween.connect("tween_all_completed", self, "on_tween_complete")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func continue():
-	hide()
-
-func set_text(text: String):
-	$VBoxContainer/HBoxContainer/RichTextLabel.set_text(text)
+func next():
+	if page < 1:
+		page += 1
+		$VBoxContainer/HBoxContainer/RichTextLabel.set_text(page_text[page])
+	else:
+		hide()
 
 func set_model(name: String):
 #	my_texture = texture
@@ -31,33 +37,23 @@ func set_model(name: String):
 	var obj = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + name )
 	if (is_instance_valid(obj)):
 		obj.show()
-		var obj2 = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + name +"/Item")
-		obj2.set_rotation_degrees(Vector3(10,0,0))
+		var obj2 = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + name +"/Body")
 		$VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer.show()
 		model_name = name
-#		$Tween.interpolate_property(self,"rotation_degrees",
-#		360,
-##		Vector3(rad2deg(facingAngle.x),
-##			rad2deg(facingAngle.y),
-##			rad2deg(facingAngle.z)),
-#		Vector3(0,0,0),
-#		2,
-#		Tween.TRANS_LINEAR,
-#		Tween.EASE_IN_OUT)
-
 		$Tween.interpolate_property(obj2, "rotation:y", obj2.rotation.y, direction, 5/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$Tween.interpolate_property(obj2, "translation:x", 0,-rot_radius, 5/2, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 		$Tween.interpolate_property(obj2, "translation:z", -rot_radius,0 , 5/2, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 		$Tween.start()
 #	if texture: $VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer.show()
 #	else: $VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer.hide()
-	
-func Dialog_about_to_show():
-	get_node("/root/Level/Beat").set_paused(true)
 
+
+func Dialog_about_to_show():
+	page = 0
+	$VBoxContainer/HBoxContainer/RichTextLabel.set_text(page_text[page])
+	
 func Dialog_about_to_hide():
 	$Tween.stop_all()
-	get_node("/root/Level/Beat").set_paused(false)
 	$VBoxContainer/HBoxContainer/RichTextLabel.set_text("")
 	$VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer.hide()
 	direction = PI/2
@@ -69,7 +65,7 @@ func Dialog_about_to_hide():
 		model_name = null
 
 func on_tween_complete():
-	var obj2 = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + model_name +"/Item")
+	var obj2 = get_node("VBoxContainer/HBoxContainer/CenterContainer/ViewportContainer/Viewport/" + model_name +"/Body")
 	var cur_pos = obj2.get_translation()
 	var x_temp = cur_pos.x + x_direction
 	var z_temp = cur_pos.z + z_direction

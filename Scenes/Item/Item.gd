@@ -61,10 +61,10 @@ func type_string() -> String:
 	
 func type_description() -> String:
 	match type:
-		Globals.ItemType.key: return "A Key! This is the key that can open the next door. Run into the door to use the key."
+		Globals.ItemType.key: return "A Key! This is the key that can open the next door.\n\nRun into the door to use the key."
 		Globals.ItemType.chest: return "There could be anything in this chest. It could even be another chest. "
 		Globals.ItemType.potion: return "Potent pick-me-up potion promises perfect pulminatory points."
-		Globals.ItemType.fire: return "Greek Fire burns green and is hot to the touch."
+		Globals.ItemType.fire: return "Greek Fire burns green and is hot to the touch.\n\nHurts friends and foes alike!"
 	return ""
 
 func type_texture() -> Texture:

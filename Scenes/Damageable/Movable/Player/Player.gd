@@ -89,6 +89,12 @@ func open_door(door: Node):
 	pass
 	
 func _process(delta):
+	if get_node('/root/Level/RestartDialog').visible: return
+	if Input.is_action_just_pressed("ui_pause"):
+		get_node('/root/Level/RestartDialog').should_show_continue = true
+		get_node('/root/Level/RestartDialog').popup()
+		get_node('/root/Level/Beat').set_paused(true)
+		return
 	if !is_alive: return
 	var next_item = "player1_next_item"
 	if not is_first_player:
@@ -96,6 +102,13 @@ func _process(delta):
 	if Input.is_action_just_pressed(next_item):
 		for index in item_guis: index.set_selected(false)
 		selected_item = (selected_item + 1) % max_items
+		item_guis[selected_item].set_selected(true)
+	var prev_item = "player1_prev_item"
+	if not is_first_player:
+		prev_item = "player2_prev_item"
+	if Input.is_action_just_pressed(prev_item):
+		for index in item_guis: index.set_selected(false)
+		selected_item = (selected_item + 2) % max_items
 		item_guis[selected_item].set_selected(true)
 	if not (has_moved):
 		var input_map = player1_inputs
@@ -115,9 +128,9 @@ func _process(delta):
 			has_moved = true
 
 func _on_Beat_timeout():
-	var beats_dict = {0: ".", 1: "..", 2: "..."}
-	print("Beat Happened" + beats_dict[beat_counter])
-	beat_counter = (beat_counter + 1) % 3
+#	var beats_dict = {0: ".", 1: "..", 2: "..."}
+##	print("Beat Happened" + beats_dict[beat_counter])
+#	beat_counter = (beat_counter + 1) % 3
 	has_moved = false
 
 

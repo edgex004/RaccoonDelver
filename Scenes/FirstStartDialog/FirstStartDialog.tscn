@@ -1,0 +1,140 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Fonts/Default.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scenes/FirstStartDialog/FirstStartDialog.gd" type="Script" id=2]
+[ext_resource path="res://Interface/Buttons/Button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/FirstStartDialog/Players.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/InstructionDialog/InstructionDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/CreditsDialog/CreditsDialog.tscn" type="PackedScene" id=6]
+
+[node name="FirstStartDialog" type="Popup"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InstructionDialog" parent="." instance=ExtResource( 5 )]
+
+[node name="CreditsDialog" parent="." instance=ExtResource( 6 )]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.266667, 0.254902, 0.423529, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect/VBoxContainer"]
+margin_right = 1024.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 0, 150 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/VBoxContainer/CenterContainer"]
+margin_left = 437.0
+margin_top = 55.0
+margin_right = 587.0
+margin_bottom = 95.0
+rect_min_size = Vector2( 150, 40 )
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 1 )
+text = "Raccoon Delver"
+scroll_active = false
+
+[node name="Vboxcontainer" type="VBoxContainer" parent="ColorRect/VBoxContainer"]
+margin_top = 154.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer5" type="CenterContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_right = 1024.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Start" parent="ColorRect/VBoxContainer/Vboxcontainer/CenterContainer5" instance=ExtResource( 3 )]
+margin_left = 432.0
+margin_top = 15.0
+margin_right = 592.0
+margin_bottom = 79.0
+text = "Start"
+
+[node name="CenterContainer4" type="CenterContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_top = 99.0
+margin_right = 1024.0
+margin_bottom = 194.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Players" parent="ColorRect/VBoxContainer/Vboxcontainer/CenterContainer4" instance=ExtResource( 3 )]
+margin_left = 432.0
+margin_top = 15.0
+margin_right = 592.0
+margin_bottom = 79.0
+text = "Players: 1"
+script = ExtResource( 4 )
+
+[node name="CenterContainer6" type="CenterContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_top = 198.0
+margin_right = 1024.0
+margin_bottom = 293.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Instructions" parent="ColorRect/VBoxContainer/Vboxcontainer/CenterContainer6" instance=ExtResource( 3 )]
+margin_left = 432.0
+margin_top = 15.0
+margin_right = 592.0
+margin_bottom = 79.0
+text = "Instructions"
+
+[node name="CenterContainer7" type="CenterContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_top = 198.0
+margin_right = 1024.0
+margin_bottom = 293.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Credits" parent="ColorRect/VBoxContainer/Vboxcontainer/CenterContainer7" instance=ExtResource( 3 )]
+margin_left = 432.0
+margin_top = 15.0
+margin_right = 592.0
+margin_bottom = 79.0
+text = "Credits"
+
+[node name="CenterContainer3" type="CenterContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_top = 297.0
+margin_right = 1024.0
+margin_bottom = 392.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Exit" parent="ColorRect/VBoxContainer/Vboxcontainer/CenterContainer3" instance=ExtResource( 3 )]
+margin_left = 432.0
+margin_top = 15.0
+margin_right = 592.0
+margin_bottom = 79.0
+text = "Exit"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer/Vboxcontainer"]
+margin_top = 396.0
+margin_right = 1024.0
+margin_bottom = 446.0
+rect_min_size = Vector2( 0, 50 )
+
+[editable path="CreditsDialog"]
