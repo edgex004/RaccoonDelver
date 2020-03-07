@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scenes/Dialog/ActionButton.svg" type="Texture" id=1]
 [ext_resource path="res://Scenes/Dialog/Dialog.gd" type="Script" id=2]
@@ -6,10 +6,12 @@
 [ext_resource path="res://Scenes/Item/Greek_Fire.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Item/JustPotion.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Item/Key.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Fonts/Amatic.tres" type="DynamicFont" id=7]
 
 [sub_resource type="Theme" id=1]
 
 [node name="Dialog" type="PopupDialog"]
+visible = true
 margin_left = 168.0
 margin_top = 102.0
 margin_right = 861.0
@@ -63,7 +65,7 @@ own_world = true
 transparent_bg = true
 handle_input_locally = false
 usage = 3
-render_target_update_mode = 0
+render_target_update_mode = 3
 __meta__ = {
 "_editor_description_": ""
 }
@@ -87,6 +89,8 @@ rect_min_size = Vector2( 100, 100 )
 rect_clip_content = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_fonts/normal_font = ExtResource( 7 )
+text = "This is the potion string that tells you about potions."
 scroll_active = false
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
@@ -104,10 +108,11 @@ texture_normal = ExtResource( 1 )
 stretch_mode = 3
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/CenterContainer/TextureButton"]
-margin_left = 39.1244
-margin_top = 25.396
-margin_right = 92.1244
-margin_bottom = 40.396
+margin_left = 27.461
+margin_top = 7.90076
+margin_right = 117.461
+margin_bottom = 47.9008
+custom_fonts/normal_font = ExtResource( 7 )
 text = "Action"
 __meta__ = {
 "_edit_use_anchors_": false
