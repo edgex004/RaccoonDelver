@@ -99,6 +99,7 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			player.connect("health_change", Player1HpBar, "on_player_health_change")
 			Player1HpBar.initialize(player.health, player.health_max)
 			player.item_guis = [Player1Item1,Player1Item2,Player1Item3]
+			player.set_as_player1()
 		else: 
 			Globals.player_two = player
 			Player2GUI.visible = true
@@ -109,6 +110,7 @@ func spawnPlayer(x : int, y : int, is_first_player : bool):
 			player.connect("health_change", Player2HpBar, "on_player_health_change")
 			Player2HpBar.initialize(player.health, player.health_max)
 			player.item_guis = [Player2Item1,Player2Item2,Player2Item3]
+			player.set_as_player2()
 		set_tile(x,y,player)
 		get_node("YSort").add_child(player)
 		player.set_position( _get_tile_pos(Vector2(x,y), GroundTileMap) )

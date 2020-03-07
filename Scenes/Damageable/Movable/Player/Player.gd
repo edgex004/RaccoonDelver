@@ -165,3 +165,9 @@ func update_health_status():
 
 func set_model_facing(_direction : Vector2):
 	$ViewportContainer/Viewport/Spatial.set_facing(-_direction)
+
+func set_as_player1():
+	$ViewportContainer.modulate = Color('ffffff')
+
+func set_as_player2():
+	$ViewportContainer.modulate = Color('98ffe5')
