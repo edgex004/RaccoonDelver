@@ -36,7 +36,7 @@ var StateMap = Array()
 var ItemMap = Array()
 
 var current_level_value = 1
-const DEBUG_MODE = true
+const DEBUG_MODE = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

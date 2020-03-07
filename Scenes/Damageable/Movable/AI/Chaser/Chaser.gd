@@ -27,6 +27,8 @@ func _process(delta):
 
 func _on_Beat_timeout():
 	# Don't take an action if we're already dead
+	was_hit = false
+	
 	if not is_alive:
 		return
 	
