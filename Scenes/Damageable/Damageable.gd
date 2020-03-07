@@ -46,13 +46,12 @@ func take_damage(base_damage, source):
 		var damage = base_damage
 		var critical_hit : bool = false
 		if my_col_mask == ENEMY_COL_MASK:
-			print("Taking damage. Was_hit = " + str(was_hit))
 			if was_hit:
 				damage = base_damage * 2
 				critical_hit = true
 			else:
 				was_hit = true
-			print("My col mask: " + str(my_col_mask) + ". Base damage: " + str(base_damage) + ". Final damage: " + str(damage))
+			#print("My col mask: " + str(my_col_mask) + ". Base damage: " + str(base_damage) + ". Final damage: " + str(damage))
 		
 		health -= damage
 		update_health_status()
@@ -60,7 +59,6 @@ func take_damage(base_damage, source):
 		label.set_size(Vector2(32,16))
 		label.add_text( "-" + str(damage))
 		if critical_hit:
-			print("setting color")
 			label.set("custom_colors/default_color", Color( 0.75, 0, 0, 1))
 		add_child(label)
 		
